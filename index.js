@@ -24,4 +24,5 @@ const authRoute = require("./routes/auth");
 app.use("/api/user", authRoute);
 
 
+
 app.listen(3000, ()=>console.log("The server is running at at port 3000"));

@@ -6,6 +6,12 @@ const {
 } = require("../validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verifyToken = require("./verifyToken");
+
+
+router.get("/me",verifyToken , async (req, res) => {
+    return res.send(await User.findById(req.user._id));
+})
 
 router.post("/register", async (req, res) => {
     const {
@@ -17,7 +23,7 @@ router.post("/register", async (req, res) => {
     const userExists = await User.findOne({
         email: req.body.email
     });
-    if (userExists) return res.status(401).send({
+    if (userExists) return res.status(409).send({
         message: "A user with this email address already exists"
     });
 
