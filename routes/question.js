@@ -10,6 +10,7 @@ const verifyToken = require("./verifyToken");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", verifyToken, async (req, res) => {
+
   const { error, value } = questionValidation(req.body);
   if (error) return res.status(400).send(error);
 
@@ -85,7 +86,7 @@ router.post("/", verifyToken, async (req, res) => {
 
 router.get("/", verifyToken, async (req, res) => {
   return res.send(
-    await Subject.find().populate("questions").populate("topics")
+    await Question.find().populate("questions").populate("topics").populate("answers")
   );
 });
 
@@ -95,7 +96,8 @@ router.get("/:questionId", verifyToken, async (req, res) => {
 
   const question = await Question.findById(req.params.questionId)
     .populate("subject")
-    .populate("topic");
+    .populate("topic")
+    .populate("answers");
   if (!question) return res.status(404).send({ message: "Question Not Found" });
   return res.send(question);
 });

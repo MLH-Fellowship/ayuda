@@ -14,6 +14,10 @@ router.get("/me",verifyToken , async (req, res) => {
     return res.send(await User.findById(req.user._id));
 })
 
+router.get("/",verifyToken , async (req, res) => {
+    return res.send(await User.find().populate("answers").populate("questions"));
+})
+
 
 router.post("/extend-session", async (req, res) => {
     const {

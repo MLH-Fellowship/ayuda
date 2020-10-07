@@ -59,12 +59,23 @@ router.post("/", verifyToken, async (req, res) => {
             new: true
         }).populate("answers").populate("topic").populate("subject").populate("user");
 
+
+        user = await User.findOneAndUpdate({
+            _id: req.user._id
+        }, {
+            $set: {
+                answers: [...user._doc.answers, answer]
+            }
+        }, {
+            new: true
+        }).populate("answers").populate("questions");
+
         if (req.body.answerBeingRepliedTo) {
             answerBeingRepliedTo = await Answer.findOneAndUpdate({
                 _id: req.body.answerBeingRepliedTo
             }, {
                 $set: {
-                    answers: [...answerBeingRepliedTo._doc.replies, answer]
+                    replies: [...answerBeingRepliedTo._doc.replies, answer]
                 }
             }, {
                 new: true
@@ -74,6 +85,7 @@ router.post("/", verifyToken, async (req, res) => {
         return res.send({
             ...answer,
             question,
+            user,
             answerBeingRepliedTo
         })
 
@@ -81,3 +93,24 @@ router.post("/", verifyToken, async (req, res) => {
         res.status(400).send(err);
     }
 })
+
+
+router.get("/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+        return res.status(400).send({
+            message: "Invalid Id"
+        });
+
+    const answer = await Answer.findById(req.params.answerId)
+        .populate("replies")
+        .populate("user")
+        .populate("question")
+        .populate("answerBeingRepliedTo");
+    if (!answer) return res.status(404).send({
+        message: "Answer Not Found"
+    });
+    return res.send(answer);
+})
+
+
+module.exports = router;
