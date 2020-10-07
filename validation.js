@@ -68,6 +68,16 @@ const questionValidation = (data) => {
     return schema.validate(data)
 }
 
+const answerValidation = (data) => {
+    const schema = Joi.object({
+        text: Joi.string().required(),
+        question: Joi.string().required(),
+        answerBeingRepliedTo: Joi.string()
+    })
+    // Validate user received from request
+    return schema.validate(data)
+}
+
 
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
@@ -75,3 +85,4 @@ module.exports.topicValidation = topicValidation;
 module.exports.subjectValidation = subjectValidation;
 module.exports.extendSessionValidation = extendSessionValidation;
 module.exports.questionValidation = questionValidation;
+module.exports.answerValidation = answerValidation;
