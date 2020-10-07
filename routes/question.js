@@ -7,19 +7,20 @@ const User = require("../models/User");
 
 const { questionValidation } = require("../validation");
 const verifyToken = require("./verifyToken");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", verifyToken, async (req, res) => {
   const { error, value } = questionValidation(req.body);
   if (error) return res.status(400).send(error);
 
   let subject = await Subject.findById(req.body.subject);
-  if (!subject) return res.status(404).send({message:"Status Not Found"});
+  if (!subject) return res.status(404).send({ message: "Status Not Found" });
 
   let topic = await Topic.findById(req.body.topic);
-  if (!topic) return res.status(404).send({message:"Topic Not Found"});
+  if (!topic) return res.status(404).send({ message: "Topic Not Found" });
 
   let user = await User.findById(req.user._id);
-  if (!user) return res.status(404).send({message:"Status Not Found"});
+  if (!user) return res.status(404).send({ message: "Status Not Found" });
 
   let question = new Question({
     title: req.body.title,
@@ -69,14 +70,13 @@ router.post("/", verifyToken, async (req, res) => {
       {
         new: true,
       }
-    )
-    .populate("questions");
+    ).populate("questions");
 
     return res.send({
       ...question._doc,
       user,
       subject,
-      topic
+      topic,
     });
   } catch (err) {
     res.status(400).send(err);
@@ -84,7 +84,20 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/", verifyToken, async (req, res) => {
-  return res.send(await Subject.find());
+  return res.send(
+    await Subject.find().populate("questions").populate("topics")
+  );
+});
+
+router.get("/:questionId", verifyToken, async (req, res) => {
+  if (!ObjectId.isValid(req.params.questionId))
+    return res.status(400).send({ message: "Invalid Id" });
+
+  const question = await Question.findById(req.params.questionId)
+    .populate("subject")
+    .populate("topic");
+  if (!question) return res.status(404).send({ message: "Question Not Found" });
+  return res.send(question);
 });
 
 module.exports = router;

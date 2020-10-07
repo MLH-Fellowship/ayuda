@@ -5,6 +5,7 @@ const Subject = require("../models/Subject");
 
 const { topicValidation } = require("../validation");
 const verifyToken = require("./verifyToken");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", verifyToken, async (req, res) => {
   const { error, value } = topicValidation(req.body);
@@ -37,7 +38,7 @@ router.post("/", verifyToken, async (req, res) => {
 
     return res.send({
       ...topic._doc,
-      subject
+      subject,
     });
   } catch (err) {
     res.status(400).send(err);
@@ -45,7 +46,17 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/", verifyToken, async (req, res) => {
-  return res.send(await Topic.find().populate("subject"));
+  return res.send(await Topic.find().populate("subject").populate("questions"));
+});
+
+router.get("/:topicId", verifyToken, async (req, res) => {
+  if (!ObjectId.isValid(req.params.topicId))
+    return res.status(400).send({ message: "Invalid Id" });
+
+  const topic = await (await Topic.findById(req.params.topicId).populate("questions").populate("subject"));
+  if (!topic) return res.status(404).send({ message: "Topic Not Found" });
+  
+  return res.send(topic);
 });
 
 module.exports = router;
