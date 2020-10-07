@@ -44,6 +44,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         min: 6
     },
+    questions: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Question"
+        },
+    ],
     createdAt: {
         type: Date,
         default: Date.now

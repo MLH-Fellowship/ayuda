@@ -21,11 +21,13 @@ app.use(express.json());
 const authRoute = require("./routes/auth");
 const subjectsRoute = require("./routes/subject");
 const topicsRoute = require("./routes/topic");
+const questionsRoute = require("./routes/question");
 
 
 // Route Middlewares
 app.use("/api/user", authRoute);
 app.use("/api/topics", topicsRoute);
+app.use("/api/questions", questionsRoute);
 app.use("/api/subjects", subjectsRoute);
 
 
