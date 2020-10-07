@@ -2,7 +2,8 @@ const router = require("express").Router();
 const User = require("../models/User");
 const {
     registerValidation,
-    loginValidation
+    loginValidation,
+    extendSessionValidation
 } = require("../validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -11,6 +12,34 @@ const verifyToken = require("./verifyToken");
 
 router.get("/me",verifyToken , async (req, res) => {
     return res.send(await User.findById(req.user._id));
+})
+
+
+router.post("/extend-session", async (req, res) => {
+    const {
+        error,
+        value
+    } = extendSessionValidation(req.body);
+    if (error) return res.status(400).send(error);
+
+    let validRefreshToken;
+    try{
+        validRefreshToken = jwt.verify(req.body.refreshToken ,process.env.REFRESH_TOKEN_SECRET);
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+
+    const {accessToken, refreshToken} = generateAccessAndRefreshToken(validRefreshToken.user);
+
+    return res.send({
+        user: {
+            ...validRefreshToken.user,
+            password: null
+        },
+        accessToken,
+        refreshToken
+    });
+    
 })
 
 router.post("/register", async (req, res) => {
@@ -43,7 +72,7 @@ router.post("/register", async (req, res) => {
 
     try {
         const savedUser = await user.save();
-        const {accessToken, refreshToken} = generateAccessAndRefreshToken(savedUser);
+        const {accessToken, refreshToken} = generateAccessAndRefreshToken(savedUser._doc);
 
         return res.send({
             user: {
@@ -81,7 +110,7 @@ router.post("/login", async (req, res) => {
         message: "Email or password is invalid."
     });
 
-    const {accessToken, refreshToken} = generateAccessAndRefreshToken(userExists);
+    const {accessToken, refreshToken} = generateAccessAndRefreshToken(userExists._doc);
 
     return res.send({
         user: {
@@ -98,7 +127,7 @@ const generateAccessAndRefreshToken = (user) => {
     // Create and assign tokens
     const accessToken = jwt.sign({
             user: {
-                ...user._doc,
+                ...user,
                 password: null
             }
         },
@@ -108,7 +137,7 @@ const generateAccessAndRefreshToken = (user) => {
     );
     const refreshToken = jwt.sign({
             user: {
-                ...user._doc,
+                ...user,
                 password: null
             }
         },

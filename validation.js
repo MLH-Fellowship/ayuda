@@ -31,6 +31,48 @@ const loginValidation = (data) => {
 
 }
 
+const topicValidation = (data) => {
+    const schema = Joi.object({
+        title: Joi.string().required()
+    })
+    // Validate user received from request
+    return schema.validate(data)
+}
+
+const subjectValidation = (data) => {
+    const schema = Joi.object({
+        title: Joi.string().required(),
+        topics: Joi.array().items(Joi.string()).required()
+    })
+    // Validate user received from request
+    return schema.validate(data)
+}
+
+const extendSessionValidation = (data) => {
+    const schema = Joi.object({
+        refreshToken: Joi.string().required()
+    })
+    // Validate user received from request
+    return schema.validate(data)
+}
+
+const questionValidation = (data) => {
+    const schema = Joi.object({
+        title: Joi.string().required(),
+        text: Joi.string().required(),
+        tags: Joi.array().items(Joi.string()),
+        topic: Joi.string().required(),
+        subject: Joi.string().required(),
+        user: Joi.string().required(),
+    })
+    // Validate user received from request
+    return schema.validate(data)
+}
+
 
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.topicValidation = topicValidation;
+module.exports.subjectValidation = subjectValidation;
+module.exports.extendSessionValidation = extendSessionValidation;
+module.exports.questionValidation = questionValidation;

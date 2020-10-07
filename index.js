@@ -19,10 +19,14 @@ app.use(express.json());
 
 // Import Routes
 const authRoute = require("./routes/auth");
+const subjectsRoute = require("./routes/subject");
+const topicsRoute = require("./routes/topic");
+
 
 // Route Middlewares
 app.use("/api/user", authRoute);
-
+app.use("/api/topics", topicsRoute);
+app.use("/api/subjects", subjectsRoute);
 
 
 app.listen(3000, ()=>console.log("The server is running at at port 3000"));
