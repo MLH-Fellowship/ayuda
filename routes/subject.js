@@ -10,17 +10,10 @@ router.post("/", verifyToken, async (req, res) => {
   const { error, value } = subjectValidation(req.body);
   if (error) return res.status(400).send(error);
 
-  let topicsInSubject = [];
-  for await (const topicId of req.body.topics) {
-    let topic = await Topic.findById(topicId);
-    if (!topic)
-      return res.status(404).send(`Topic of Id: ${topicId} not found.`);
-    topicsInSubject.push(topic);
-  }
+
 
   let subject = new Subject({
-      title: req.body.title,
-      topics: topicsInSubject
+      title: req.body.title
   })
 
   try {
@@ -35,7 +28,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/",  verifyToken , async (req, res) => {
-    return res.send(await Subject.find());
+    return res.send(await Subject.find().populate("questions").populate("topics"));
 })
 
 module.exports = router;

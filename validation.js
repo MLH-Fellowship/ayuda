@@ -33,7 +33,8 @@ const loginValidation = (data) => {
 
 const topicValidation = (data) => {
     const schema = Joi.object({
-        title: Joi.string().required()
+        title: Joi.string().required(),
+        subject: Joi.string().required()
     })
     // Validate user received from request
     return schema.validate(data)
@@ -41,8 +42,7 @@ const topicValidation = (data) => {
 
 const subjectValidation = (data) => {
     const schema = Joi.object({
-        title: Joi.string().required(),
-        topics: Joi.array().items(Joi.string()).required()
+        title: Joi.string().required()
     })
     // Validate user received from request
     return schema.validate(data)
@@ -62,8 +62,7 @@ const questionValidation = (data) => {
         text: Joi.string().required(),
         tags: Joi.array().items(Joi.string()),
         topic: Joi.string().required(),
-        subject: Joi.string().required(),
-        user: Joi.string().required(),
+        subject: Joi.string().required()
     })
     // Validate user received from request
     return schema.validate(data)
