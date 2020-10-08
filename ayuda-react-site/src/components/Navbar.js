@@ -15,6 +15,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { useHistory } from "react-router-dom";
+
 import "../index.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +83,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const history = useHistory();
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -117,8 +121,38 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {auth.isAuthenticated() ? (
+        <div>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              history.push("/");
+            }}
+          >
+            Logout
+          </MenuItem>
+        </div>
+      ) : (
+        <div>
+          <MenuItem
+            onClick={() => {
+              history.push("/signup");
+              handleMenuClose();
+            }}
+          >
+            Signup
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              history.push("/");
+              handleMenuClose();
+            }}
+          >
+            Login
+          </MenuItem>
+        </div>
+      )}
     </Menu>
   );
 
@@ -133,22 +167,6 @@ const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -162,18 +180,19 @@ const Navbar = () => {
       </MenuItem>
     </Menu>
   );
+
   return (
     <div className={classes.grow}>
       <AppBar position="static">
-        <Toolbar className="d-flex justify-content-between">
+        <Toolbar>
           {/* <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="open drawer"
-        >
-          <MenuIcon />
-        </IconButton> */}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="open drawer"
+          >
+            <MenuIcon />
+          </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
             Ayuda
           </Typography>
@@ -190,7 +209,7 @@ const Navbar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          {/* <div className={classes.grow} /> */}
+          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
