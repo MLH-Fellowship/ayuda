@@ -59,4 +59,12 @@ router.get("/:topicId", verifyToken, async (req, res) => {
   return res.send(topic);
 });
 
+router.delete("/:topicId", verifyToken, async (req, res) => {
+  if (!ObjectId.isValid(req.params.topicId))
+    return res.status(400).send({ message: "Invalid Id" });
+
+  await Topic.findByIdAndDelete(req.params.topicId)
+  return res.status(204).end()
+})
+
 module.exports = router;
