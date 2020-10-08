@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require('dotenv');
 dotenv.config(); // reads the .env file
+var cors = require('cors')
 
 // Connect to db
 mongoose.connect(
@@ -17,6 +18,7 @@ mongoose.connect(
 
 // Middleware
 app.use(express.json());
+app.use(cors())
 
 // Import Routes
 const authRoute = require("./routes/auth");

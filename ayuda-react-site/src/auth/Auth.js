@@ -6,18 +6,22 @@ class Auth {
         this.authenticated = false
     }
 
-    login(cb) {
+    login(cb, accessToken, refreshToken) {
         this.authenticated = true;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
         cb();
     }
 
     logout(cb) {
         this.authenticated = false;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         cb();
     }
 
     isAuthenticated() {
-        return this.authenticated;
+        return localStorage.getItem("accessToken") != null;
     }
 }
 

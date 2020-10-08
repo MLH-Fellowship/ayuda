@@ -29,6 +29,7 @@ code {
     U+2215, U+FEFF, U+FFFD;
 }
 
+
 .test {
   background-color: red;
 }
@@ -40,4 +41,17 @@ code {
 
 *:focus {
   outline: none !important;
+}
+
+@font-face {
+  font-family: 'SansitaSwashed';
+  src: local('SansitaSwashed'), url(./fonts/SansitaSwashed-VariableFont_wght.ttf) format('truetype');
+}
+
+.styledTitle{
+  font-family: SansitaSwashed;
+}
+
+.link {
+  cursor:pointer;
 }

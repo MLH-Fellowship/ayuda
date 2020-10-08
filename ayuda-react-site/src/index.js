@@ -6,6 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import "fontsource-roboto";
 import 'bootstrap/dist/css/bootstrap.css';
+import "./fonts/SansitaSwashed-VariableFont_wght.ttf";
 
 
 const theme = createMuiTheme({
