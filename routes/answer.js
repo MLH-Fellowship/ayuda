@@ -176,6 +176,11 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     res.status(200).json(savedAnswer)
 })
 
-
-
+router.delete("/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+      return res.status(400).send({ message: "Invalid Id" });
+  
+    await Topic.findByIdAndDelete(req.params.answerId)
+    return res.status(204).end()
+  })
 module.exports = router;
