@@ -128,17 +128,16 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
     const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))    
 
     //One vote per user
-    //req.body.value represents vote value, only valid values are -1/1 for downvote/upvote respectively (0 should also be invalid)
-    //No validation for any of this yet
+    //req.body.isUpvote represents whether it's an upvote or downvote
     if(vote) {
         console.log("Vote exists already for user " + req.user._id)
-        vote.value = req.body.value
+        vote.isUpvote = req.body.isUpvote
     }
     else {
         console.log("Vote does not exist already for user " + req.user._id)
         const newVote = {
             user: req.user,
-            value: req.body.value
+            isUpvote: req.body.isUpvote
         }
 
         answer.votes.push(newVote)
@@ -177,6 +176,11 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     res.status(200).json(savedAnswer)
 })
 
-
-
+router.delete("/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+      return res.status(400).send({ message: "Invalid Id" });
+  
+    await Topic.findByIdAndDelete(req.params.answerId)
+    return res.status(204).end()
+  })
 module.exports = router;

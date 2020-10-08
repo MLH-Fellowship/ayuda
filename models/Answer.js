@@ -34,8 +34,8 @@ const answerSchema = new mongoose.Schema({
       ref: "User",
       required: true
     },
-    value: {
-      type: mongoose.Schema.Types.Number, //-1 for downvote, 1 for upvote
+    isUpvote: {
+      type: mongoose.Schema.Types.Boolean, //true for upvote, false for downvote
       required: true
     }
   }]
