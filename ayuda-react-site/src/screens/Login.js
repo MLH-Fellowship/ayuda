@@ -37,6 +37,11 @@ export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
+
+
+
+
   const login = () => {
     axios.post(url + "api/user/login", { email, password })
       .then(res => {
@@ -50,8 +55,8 @@ export default function Login(props) {
   }
 
   return (
-    <div className="container centered flex-column d-flex align-items-center justify-content-center">
-      <Card style={{ minWidth: "40%" }}>
+    <div className="container flex-column d-flex align-items-center justify-content-center">
+      <Card style={{ minWidth: "40%" }} className="mt-4">
         <div>
           <CardMedia
             className="p-0 m-0"
@@ -98,10 +103,13 @@ export default function Login(props) {
         </div>
       </Card>
 
-      <Card className="mt-3 p-2" style={{ minWidth: "40%" }}>
+      <Card className="mb-4 mt-3 p-2" style={{ minWidth: "40%" }}>
         <Typography variant="overline">Don't Have An Account?</Typography>
-        <Link href="#" onClick={preventDefault}>
-          <Typography className="pl-1" variant="overline">
+        <Link onClick={(e)=>{
+          props.history.push("/signup")
+          preventDefault(e);
+        }}>
+          <Typography className="pl-1 link" variant="overline">
             Sign up!
           </Typography>
         </Link>

@@ -51,3 +51,7 @@ code {
 .styledTitle{
   font-family: SansitaSwashed;
 }
+
+.link {
+  cursor:pointer;
+}
