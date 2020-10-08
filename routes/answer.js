@@ -112,5 +112,39 @@ router.get("/:answerId", verifyToken, async (req, res) => {
     return res.send(answer);
 })
 
+router.put("/vote/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+    return res.status(400).send({
+        message: "Invalid Id"
+    });
+
+    let user = await User.findById(req.user._id);
+    if (!user) return res.status(404).send({
+        message: "User Not Found"
+    });
+
+    const answer = await Answer.findById(req.params.answerId)
+    const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))    
+
+    //One vote per user
+    //req.body.value represents vote value, only valid values are -1/1 for downvote/upvote respectively (0 should also be invalid)
+    //No validation for any of this yet
+    if(vote) {
+        console.log("Vote exists already for user " + req.user._id)
+        vote.value = req.body.value
+    }
+    else {
+        console.log("Vote does not exist already for user " + req.user._id)
+        const newVote = {
+            user: req.user,
+            value: req.body.value
+        }
+
+        answer.votes.push(newVote)
+    }
+
+    const savedAnswer = await answer.save()
+    res.status(200).json(savedAnswer)
+})
 
 module.exports = router;
