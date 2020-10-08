@@ -127,7 +127,10 @@ const Navbar = (props) => {
           <MenuItem
             onClick={() => {
               handleMenuClose();
-              history.push("/");
+              auth.logout(()=>{
+                history.push("/");
+              });
+              
             }}
           >
             Logout

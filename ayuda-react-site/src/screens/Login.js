@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import auth from "../auth/Auth";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -11,6 +12,8 @@ import Link from "@material-ui/core/Link";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 import backgroundImage from "../images/question.jpg";
+import { url } from "../constants";
+import axios from 'axios';
 
 const useStyles = makeStyles({
   bullet: {
@@ -30,6 +33,21 @@ export default function Login(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const preventDefault = (event) => event.preventDefault();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+    axios.post(url + "api/user/login", { email, password })
+      .then(res => {
+        const accessToken = res.data.accessToken;
+        const refreshToken = res.data.refreshToken;
+        auth.login(()=>{
+            props.history.push("/app")
+        }, accessToken, refreshToken)
+        //this.setState({ persons });
+      })
+  }
 
   return (
     <div className="container centered flex-column d-flex align-items-center justify-content-center">
@@ -53,6 +71,9 @@ export default function Login(props) {
                     id="outlined-basic"
                     label="Email Address"
                     variant="outlined"
+                    onChange={(e)=>{
+                      setEmail(e.target.value)
+                    }}
                   />
                   <TextField
                     id="filled-password-input"
@@ -60,13 +81,16 @@ export default function Login(props) {
                     type="password"
                     autoComplete="current-password"
                     variant="outlined"
+                    onChange={(e)=>{
+                      setPassword(e.target.value)
+                    }}
                   />
                 </div>
               </form>
             </CardContent>
 
             <CardActions className="d-flex justify-content-center">
-              <Button variant="contained" color="primary" style={{ minWidth: "40%" }}>
+              <Button variant="contained" color="primary" style={{ minWidth: "40%" }} onClick={login}>
                 <Typography>Login</Typography>
               </Button>
             </CardActions>
