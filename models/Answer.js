@@ -28,6 +28,10 @@ const answerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  votes: {
+    type: Date,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("Answer", answerSchema);
