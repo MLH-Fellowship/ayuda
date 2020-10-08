@@ -28,6 +28,17 @@ const answerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  votes: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    value: {
+      type: mongoose.Schema.Types.Number, //-1 for downvote, 1 for upvote
+      required: true
+    }
+  }]
 });
 
 module.exports = mongoose.model("Answer", answerSchema);

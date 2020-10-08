@@ -112,5 +112,71 @@ router.get("/:answerId", verifyToken, async (req, res) => {
     return res.send(answer);
 })
 
+//Shared endpoint for upvoting/downvoting a single answer
+router.put("/vote/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+    return res.status(400).send({
+        message: "Invalid Id"
+    });
+
+    let user = await User.findById(req.user._id);
+    if (!user) return res.status(404).send({
+        message: "User Not Found"
+    });
+
+    const answer = await Answer.findById(req.params.answerId)
+    const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))    
+
+    //One vote per user
+    //req.body.value represents vote value, only valid values are -1/1 for downvote/upvote respectively (0 should also be invalid)
+    //No validation for any of this yet
+    if(vote) {
+        console.log("Vote exists already for user " + req.user._id)
+        vote.value = req.body.value
+    }
+    else {
+        console.log("Vote does not exist already for user " + req.user._id)
+        const newVote = {
+            user: req.user,
+            value: req.body.value
+        }
+
+        answer.votes.push(newVote)
+    }
+
+    const savedAnswer = await answer.save()
+    res.status(200).json(savedAnswer)
+})
+
+//Endpoint for removing user vote from a single answer
+router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+    return res.status(400).send({
+        message: "Invalid Id"
+    });
+
+    let user = await User.findById(req.user._id);
+    if (!user) return res.status(404).send({
+        message: "User Not Found"
+    });
+
+    const answer = await Answer.findById(req.params.answerId)
+    const voteIndex = answer.votes.findIndex(vote => String(vote.user._id) === String(req.user._id))    
+
+    //If the user has voted on the answer, remove the vote, otherwise don't do anything
+    if(voteIndex >= 0) {
+        console.log("Vote exists for user " + req.user._id)
+        answer.votes.splice(voteIndex, 1) //delete vote by index
+    }
+    else {
+        console.log("Vote does not exist for user " + req.user._id)
+        //do nothing
+    }
+
+    const savedAnswer = await answer.save()
+    res.status(200).json(savedAnswer)
+})
+
+
 
 module.exports = router;
