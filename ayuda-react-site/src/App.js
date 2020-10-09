@@ -5,6 +5,7 @@ import AppLayout from "./components/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Signup from "./screens/Signup";
 import Login from "./screens/Login";
+import HomeScreen from "./screens/HomeScreen"
 import "./index.css";
 
 
@@ -17,6 +18,7 @@ function App() {
             {/* <Route exact path="/" component={HomePage} /> */}
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/" component={Login} />
+            <Route exact path="/home" component={HomeScreen} />
 
             {/* <ProtectedRoute exact path="/app" component={AppLayout} /> */}
           </AppLayout>

@@ -95,7 +95,7 @@ router.post("/", verifyToken, async (req, res) => {
 })
 
 
-router.get("/:answerId", verifyToken, async (req, res) => {
+router.get("/:answerId", async (req, res) => {
     if (!ObjectId.isValid(req.params.answerId))
         return res.status(400).send({
             message: "Invalid Id"

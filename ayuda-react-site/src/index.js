@@ -12,11 +12,13 @@ import "./fonts/SansitaSwashed-VariableFont_wght.ttf";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#0C1B33",
+      // main: "#0C1B33",
+      main:"#2D2F3C",
       contrastText: '#fff'
     },
     secondary: {
-      main: "#03B5AA",
+      //main: "#03B5AA",
+      main: "#DB3E3E",
       contrastText: '#fff'
     },
   },

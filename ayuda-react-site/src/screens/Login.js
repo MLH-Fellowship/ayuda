@@ -48,7 +48,7 @@ export default function Login(props) {
         const accessToken = res.data.accessToken;
         const refreshToken = res.data.refreshToken;
         auth.login(()=>{
-            props.history.push("/app")
+            props.history.push("/home")
         }, accessToken, refreshToken)
         //this.setState({ persons });
       })
@@ -95,7 +95,7 @@ export default function Login(props) {
             </CardContent>
 
             <CardActions className="d-flex justify-content-center">
-              <Button variant="contained" color="primary" style={{ minWidth: "40%" }} onClick={login}>
+              <Button variant="contained" color="secondary" style={{ minWidth: "40%" }} onClick={login}>
                 <Typography>Login</Typography>
               </Button>
             </CardActions>

@@ -84,13 +84,13 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
   return res.send(
-    await Question.find().populate("questions").populate("topics").populate("answers")
+    await Question.find().populate("subject").populate("topic").populate("answers")
   );
 });
 
-router.get("/:questionId", verifyToken, async (req, res) => {
+router.get("/:questionId", async (req, res) => {
   if (!ObjectId.isValid(req.params.questionId))
     return res.status(400).send({ message: "Invalid Id" });
 
