@@ -20,7 +20,7 @@ const HomeScreen = () => {
           50 questions
         </Typography>
       </div>
-      <Drawer />
+      {/* <Drawer /> */}
       <hr />
     </div>
   );

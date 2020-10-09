@@ -5,9 +5,9 @@ import AppLayout from "./components/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Signup from "./screens/Signup";
 import Login from "./screens/Login";
-import HomeScreen from "./screens/HomeScreen";
+import HomeScreen from "./screens/HomeScreen"
 import "./index.css";
-import AppLayoutWithSidebar from "./components/AppLayoutWithSidebar";
+
 
 function App() {
   return (
@@ -18,12 +18,10 @@ function App() {
             {/* <Route exact path="/" component={HomePage} /> */}
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/" component={Login} />
+            <Route exact path="/home" component={HomeScreen} />
+
             {/* <ProtectedRoute exact path="/app" component={AppLayout} /> */}
           </AppLayout>
-          <AppLayoutWithSidebar>
-            <Route exact path="/home" component={HomeScreen} />
-          </AppLayoutWithSidebar>
-
           <Route path="*" component={() => "404 NOT FOUND"} />
         </Switch>
       </BrowserRouter>
