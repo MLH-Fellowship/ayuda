@@ -86,7 +86,7 @@ router.post("/", verifyToken, async (req, res) => {
 
 router.get("/", async (req, res) => {
   return res.send(
-    await Question.find().populate("questions").populate("topics").populate("answers")
+    await Question.find().populate("subject").populate("topic").populate("answers")
   );
 });
 

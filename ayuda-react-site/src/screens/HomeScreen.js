@@ -1,19 +1,20 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Question from "../components/Question";
+import axios from "axios";
+import { url } from "../constants";
 
 const HomeScreen = () => {
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://jsonplaceholder.typicode.com/users`)
-    .then(res => {
-      const persons = res.data;
-      this.setState({ persons });
-    })
-  })
+    axios.get(`${url}api/questions/`).then((res) => {
+      setQuestions(res.data);
+    });
+  });
 
   return (
     <div class="container">
@@ -53,10 +54,19 @@ const HomeScreen = () => {
         </div>
       </div>
       <hr />
-
-      <Question />
-      <hr />
-
+      {questions.map((question) => {
+        return (
+          <div>
+            <Question
+              title={question.title}
+              text={question.text}
+              topic={question.topic.title}
+              subject={question.subject.title}
+            />
+            <hr />
+          </div>
+        );
+      })}
     </div>
   );
 };

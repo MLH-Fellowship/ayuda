@@ -8,7 +8,7 @@ import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
 import ArrowDownwardOutlined from "@material-ui/icons/ArrowDownwardOutlined";
 import Link from "@material-ui/core/Link";
 
-const Question = () => {
+const Question = ({topic, text, subject, title}) => {
   return (
     <div className="d-flex">
       <div className="d-flex flex-column mr-3">
@@ -23,19 +23,19 @@ const Question = () => {
       <div className="d-flex flex-column align-items-start">
         <Link style={{ cursor: "pointer", textDecoration: "none" }}>
           <Typography variant="h5" gutterBottom>
-            This is the title of a question
+            {title}
           </Typography>
         </Link>
 
         <Typography variant="body" gutterBottom>
-          This is a question?
+          {text}
         </Typography>
         <div>
           <Button variant="contained" size="small" className="mr-2">
-            Subject
+            {subject}
           </Button>
           <Button variant="contained" size="small">
-            Topic
+            {topic}
           </Button>
         </div>
       </div>
