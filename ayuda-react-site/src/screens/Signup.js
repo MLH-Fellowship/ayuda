@@ -49,7 +49,7 @@ export default function Login(props) {
       const refreshToken = res.data.refreshToken;
       auth.login(
         () => {
-          props.history.push("/app");
+          props.history.push("/home");
         },
         accessToken,
         refreshToken
