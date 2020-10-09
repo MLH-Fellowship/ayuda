@@ -26,13 +26,13 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
   return res.send(
     await Subject.find().populate("questions").populate("topics")
   );
 });
 
-router.get("/:subjectId", verifyToken, async (req, res) => {
+router.get("/:subjectId", async (req, res) => {
   if (!ObjectId.isValid(req.params.subjectId))
     return res.status(400).send({ message: "Invalid Id" });
 

@@ -45,11 +45,11 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
   return res.send(await Topic.find().populate("subject").populate("questions"));
 });
 
-router.get("/:topicId", verifyToken, async (req, res) => {
+router.get("/:topicId", async (req, res) => {
   if (!ObjectId.isValid(req.params.topicId))
     return res.status(400).send({ message: "Invalid Id" });
 
