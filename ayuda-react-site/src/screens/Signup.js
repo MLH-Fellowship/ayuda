@@ -146,7 +146,7 @@ export default function Login(props) {
             <CardActions className="d-flex justify-content-center">
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 style={{ minWidth: "40%" }}
                 onClick={signup}
               >
