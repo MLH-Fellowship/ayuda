@@ -97,7 +97,13 @@ const HomeScreen = () => {
         >
           Subjects
         </Button>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            history.push("/topics");
+          }}
+        >
           Topics
         </Button>
       </div>

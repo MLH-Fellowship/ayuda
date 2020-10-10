@@ -5,57 +5,53 @@ import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { url } from "../constants";
 import Topic from "../components/Topic";
+import Question from "../components/Question";
 
 export default () => {
-  let { subjectId } = useParams();
-  const [subject, setSubject] = useState();
+  let { topicId } = useParams();
+  const [topic, setTopic] = useState();
 
   useEffect(() => {
-    axios.get(`${url}api/subjects/${subjectId}`).then((res) => {
-      setSubject(res.data);
+    axios.get(`${url}api/topics/${topicId}`).then((res) => {
+      setTopic(res.data);
     });
   }, []);
 
-  if (!subject) return "Loading...";
+  if (!topic) return "Loading...";
 
   return (
     <div>
       <div className="container">
         <div class="d-flex justify-content-between pt-5">
           <Typography variant="h5" gutterBottom>
-            {subject && subject.title ? subject.title : null}
+            {topic.title}
           </Typography>
           <Button variant="contained" color="secondary">
             Create Subject
           </Button>
         </div>
         <div class="d-flex flex-column align-items-start">
-          <Typography variant="body" gutterBottom>
-            {subject.topics.length == 1
-              ? subject.topics.length + " topic"
-              : subject.topics.length + " topics"}
-          </Typography>
 
           <Typography variant="body" gutterBottom>
-            {subject.questions.length == 1
-              ? subject.questions.length + " question"
-              : subject.questions.length + " questions"}
+            {topic.questions.length == 1
+              ? topic.questions.length + " question"
+              : topic.questions.length + " questions"}
           </Typography>
         </div>
         <hr />
         <Typography variant="h5" gutterBottom>
-            Topics
+            Questions
           </Typography>
         <hr />
 
-        {subject.topics.map((topic) => {
-          return (
-            <div>
-              <Topic id={topic._id} />
-              <hr />
-            </div>
-          );
-        })}
+        {topic.questions.map((question) => {
+        return (
+          <div>
+            <Question id={question._id} />
+            <hr />
+          </div>
+        );
+      })}
       </div>
     </div>
   );

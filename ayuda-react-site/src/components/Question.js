@@ -20,14 +20,14 @@ const Question = ({ id }) => {
 
   return (
     <div className="d-flex">
-      <div className="d-flex flex-column mr-3">
+      {/* <div className="d-flex flex-column mr-3">
         <IconButton color="inherit">
           <ArrowUpwardOutlined />
         </IconButton>
         <IconButton color="inherit">
           <ArrowDownwardOutlined />
         </IconButton>
-      </div>
+      </div> */}
 
       <div className="d-flex flex-column align-items-start">
         <Link style={{ cursor: "pointer", textDecoration: "none" }}>
