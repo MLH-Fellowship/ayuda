@@ -16,8 +16,10 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { useHistory, Redirect } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import "../index.css";
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -83,16 +85,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+
 const Navbar = () => {
+
+  let query = useQuery();
+  let text = query.get("text");
+
+
+
   const [searchQuery, setSearchQuery] = useState();
   const history = useHistory();
 
   const searchQuestions = (e) => {
     if (e.keyCode == 13) {
-      console.log("value", e.target.value);
+      //console.log("value", e.target.value);
       history.push({
         pathname:"/search",
-        search:`?text=${searchQuery}`
+        search:`?text=${searchQuery ? searchQuery : ""}`
       })
     }
   };
@@ -221,6 +236,7 @@ const Navbar = () => {
               onChange={(e)=>{
                 setSearchQuery(e.target.value)
               }}
+              // value={text ? text : ""}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
