@@ -115,9 +115,9 @@ router.get("/:answerId", async (req, res) => {
 //Shared endpoint for upvoting/downvoting a single answer
 router.put("/vote/:answerId", verifyToken, async (req, res) => {
     if (!ObjectId.isValid(req.params.answerId))
-    return res.status(400).send({
-        message: "Invalid Id"
-    });
+        return res.status(400).send({
+            message: "Invalid Id"
+        });
 
     let user = await User.findById(req.user._id);
     if (!user) return res.status(404).send({
@@ -125,11 +125,11 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
     });
 
     const answer = await Answer.findById(req.params.answerId)
-    const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))    
+    const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))
 
     //One vote per user
     //req.body.isUpvote represents whether it's an upvote or downvote
-    if(vote) {
+    if (vote) {
         console.log("Vote exists already for user " + req.user._id)
         vote.isUpvote = req.body.isUpvote
     }
@@ -150,9 +150,9 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
 //Endpoint for removing user vote from a single answer
 router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     if (!ObjectId.isValid(req.params.answerId))
-    return res.status(400).send({
-        message: "Invalid Id"
-    });
+        return res.status(400).send({
+            message: "Invalid Id"
+        });
 
     let user = await User.findById(req.user._id);
     if (!user) return res.status(404).send({
@@ -160,10 +160,10 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     });
 
     const answer = await Answer.findById(req.params.answerId)
-    const voteIndex = answer.votes.findIndex(vote => String(vote.user._id) === String(req.user._id))    
+    const voteIndex = answer.votes.findIndex(vote => String(vote.user._id) === String(req.user._id))
 
     //If the user has voted on the answer, remove the vote, otherwise don't do anything
-    if(voteIndex >= 0) {
+    if (voteIndex >= 0) {
         console.log("Vote exists for user " + req.user._id)
         answer.votes.splice(voteIndex, 1) //delete vote by index
     }
@@ -176,11 +176,36 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     res.status(200).json(savedAnswer)
 })
 
+
+router.put("/:answerId", async (req, res) => {
+    if (!ObjectId.isValid(req.params.answerId))
+        return res.status(400).send({ message: "Invalid Id" });
+
+    const body = req.body
+
+    const answer = await Topic.findById(req.params.answerId)
+
+    if (!answer) {
+        return res.status(400).send({ message: "No answer found for given ID" })
+    }
+
+    answer.text = body.text
+    //can't change user
+    //can't change question
+    //can't change answer being replied to
+    answer.replies = body.replies
+    //can't change creation date
+    //to change votes, use dedicated endpoint
+
+    const savedAnswer = await answer.save()
+    return res.send(savedAnswer)
+})
+
 router.delete("/:answerId", verifyToken, async (req, res) => {
     if (!ObjectId.isValid(req.params.answerId))
-      return res.status(400).send({ message: "Invalid Id" });
-  
+        return res.status(400).send({ message: "Invalid Id" });
+
     await Topic.findByIdAndDelete(req.params.answerId)
     return res.status(204).end()
-  })
+})
 module.exports = router;

@@ -59,6 +59,26 @@ router.get("/:topicId", async (req, res) => {
   return res.send(topic);
 });
 
+router.put("/:topicId", async (req, res) => {
+  if (!ObjectId.isValid(req.params.topicId))
+    return res.status(400).send({ message: "Invalid Id" });
+
+  const body = req.body
+
+  const topic = await Topic.findById(req.params.topicId)
+
+  if(!topic) {
+    return res.status(400).send({ message: "No topic found for given ID" })
+  }
+
+  topic.title = body.title
+  topic.questions = body.questions
+  topic.subject = body.subject
+
+  const savedTopic = await topic.save()
+  return res.send(savedTopic)
+})
+
 router.delete("/:topicId", verifyToken, async (req, res) => {
   if (!ObjectId.isValid(req.params.topicId))
     return res.status(400).send({ message: "Invalid Id" });
