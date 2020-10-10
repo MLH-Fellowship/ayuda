@@ -8,30 +8,16 @@ import axios from "axios";
 import { url } from "../constants";
 
 const HomeScreen = () => {
-  const [subject, setSubject] = useState();
-  const [topic, setTopic] = useState();
+  const [subject, setSubject] = useState("");
+  const [topic, setTopic] = useState("");
   const [questions, setQuestions] = useState([]);
 
   const searchQuestions = () => {
-    if (subject && topic) {
-      axios
-        .get(`${url}api/questions?subject=${subject}&topic=${topic}`)
-        .then((res) => {
-          setQuestions(res.data);
-        });
-    } else if (topic) {
-      axios.get(`${url}api/questions?topic=${topic}`).then((res) => {
+    axios
+      .get(`${url}api/questions?subject=${subject}&topic=${topic}`)
+      .then((res) => {
         setQuestions(res.data);
       });
-    } else if (subject) {
-      axios.get(`${url}api/questions?subject=${subject}`).then((res) => {
-        setQuestions(res.data);
-      });
-    } else {
-      axios.get(`${url}api/questions/`).then((res) => {
-        setQuestions(res.data);
-      });
-    }
   };
 
   useEffect(() => {
@@ -62,8 +48,8 @@ const HomeScreen = () => {
             autoComplete="current-password"
             variant="outlined"
             className="mr-2"
-            onChange={(e)=>{
-              setSubject(e.target.value)
+            onChange={(e) => {
+              setSubject(e.target.value);
             }}
           />
           <TextField
@@ -73,8 +59,8 @@ const HomeScreen = () => {
             autoComplete="current-password"
             variant="outlined"
             className="mr-2"
-            onChange={(e)=>{
-              setTopic(e.target.value)
+            onChange={(e) => {
+              setTopic(e.target.value);
             }}
           />
 
