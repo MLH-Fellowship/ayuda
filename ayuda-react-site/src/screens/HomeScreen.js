@@ -39,11 +39,6 @@ const HomeScreen = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => {
-            if (!auth.isAuthenticated()) {
-              history.push("/");
-            }
-          }}
         >
           Ask Question
         </Button>
@@ -97,7 +92,13 @@ const HomeScreen = () => {
         >
           Subjects
         </Button>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            history.push("/topics");
+          }}
+        >
           Topics
         </Button>
       </div>

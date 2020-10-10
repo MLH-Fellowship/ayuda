@@ -4,8 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { url } from "../constants";
 import Subject from "../components/Subject";
+import { useHistory } from "react-router-dom";
 
 export default () => {
+  const history = useHistory();
+
 
   const [subjects, setSubjects] = useState([]);
 
@@ -21,7 +24,9 @@ export default () => {
         <Typography variant="h5" gutterBottom>
           All Subjects
         </Typography>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" onClick={()=>{
+          history.push("/create-subject")
+        }}>
           Create Subject
         </Button>
       </div>

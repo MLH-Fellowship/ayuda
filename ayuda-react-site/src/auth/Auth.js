@@ -20,6 +20,11 @@ class Auth {
         cb();
     }
 
+
+    getAccessToken() {
+        return localStorage.getItem("accessToken")
+    }
+
     isAuthenticated() {
         return localStorage.getItem("accessToken") != null;
     }

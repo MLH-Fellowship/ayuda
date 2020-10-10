@@ -29,7 +29,7 @@ export default ({ id }) => {
         style={{ cursor: "pointer", textDecoration: "none" }}
         onClick={() => {
           history.push({
-            pathname: `/subjects/${id}`,
+            pathname: `/topics/${topic._id}`,
           });
         }}
       >

@@ -5,8 +5,11 @@ import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { url } from "../constants";
 import Topic from "../components/Topic";
+import { useHistory } from "react-router-dom";
 
 export default () => {
+  const history = useHistory();
+
   let { subjectId } = useParams();
   const [subject, setSubject] = useState();
 
@@ -25,9 +28,30 @@ export default () => {
           <Typography variant="h5" gutterBottom>
             {subject && subject.title ? subject.title : null}
           </Typography>
-          <Button variant="contained" color="secondary">
-            Create Subject
-          </Button>
+          <div>
+            <Button
+              variant="contained"
+              color="secondary"
+              className="mr-2"
+              onClick={() => {
+                history.push("/create-subject");
+              }}
+            >
+              Create Subject
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={()=>{
+                history.push({
+                  pathname:"/create-topic",
+                  search:`?subject=${subject._id}`
+                })
+              }}
+            >
+              Create Topic
+            </Button>
+          </div>
         </div>
         <div class="d-flex flex-column align-items-start">
           <Typography variant="body" gutterBottom>
@@ -42,6 +66,10 @@ export default () => {
               : subject.questions.length + " questions"}
           </Typography>
         </div>
+        <hr />
+        <Typography variant="h5" gutterBottom>
+          Topics
+        </Typography>
         <hr />
 
         {subject.topics.map((topic) => {

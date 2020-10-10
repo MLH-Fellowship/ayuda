@@ -9,6 +9,11 @@ import SearchScreen from "./screens/SearchScreen";
 import SubjectScreen from "./screens/SubjectsScreen";
 import "./index.css";
 import SingleSubjectScreen from "./screens/SingleSubjectScreen";
+import SingleTopicScreen from "./screens/SingleTopicScreen";
+import TopicScreen from "./screens/TopicsScreen";
+import CreateSubjectScreen from "./screens/CreateSubjectScreen";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CreateTopicScreen from "./screens/CreateTopicScreen";
 
 function App() {
   return (
@@ -23,9 +28,11 @@ function App() {
             <Route exact path="/search" component={SearchScreen}  />
             <Route exact path="/subjects" component={SubjectScreen}  />
             <Route exact path="/subjects/:subjectId" component={SingleSubjectScreen}  />
+            <Route exact path="/topics/:topicId" component={SingleTopicScreen}  />
+            <Route exact path="/topics/" component={TopicScreen}  />            
 
-
-            {/* <ProtectedRoute exact path="/app" component={AppLayout} /> */}
+            <ProtectedRoute exact path="/create-subject" component={CreateSubjectScreen} />
+            <ProtectedRoute exact path="/create-topic" component={CreateTopicScreen} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </AppLayout>
