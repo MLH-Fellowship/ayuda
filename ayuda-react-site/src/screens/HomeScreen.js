@@ -6,8 +6,12 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import Question from "../components/Question";
 import axios from "axios";
 import { url } from "../constants";
+import auth from "../auth/Auth";
+import { useHistory, Redirect } from "react-router-dom";
 
 const HomeScreen = () => {
+  const history = useHistory();
+
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
   const [questions, setQuestions] = useState([]);
@@ -32,7 +36,15 @@ const HomeScreen = () => {
         <Typography variant="h5" gutterBottom>
           All Questions
         </Typography>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            if (!auth.isAuthenticated()) {
+              history.push("/");
+            }
+          }}
+        >
           Ask Question
         </Button>
       </div>
@@ -74,15 +86,27 @@ const HomeScreen = () => {
         </div>
       </div>
       <hr />
+      <div>
+        <Button
+          variant="contained"
+          color="secondary"
+          className="mr-2"
+          onClick={() => {
+            history.push("/subjects");
+          }}
+        >
+          Subjects
+        </Button>
+        <Button variant="contained" color="secondary">
+          Topics
+        </Button>
+      </div>
+      <hr />
+
       {questions.map((question) => {
         return (
           <div>
-            <Question
-              title={question.title}
-              text={question.text}
-              topic={question.topic.title}
-              subject={question.subject.title}
-            />
+            <Question id={question._id} />
             <hr />
           </div>
         );

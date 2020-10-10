@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import "../index.css";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 import backgroundImage from "../images/question.jpg";
 import { url } from "../constants";
@@ -31,7 +30,6 @@ const useStyles = makeStyles({
 
 export default function Login(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
   const preventDefault = (event) => event.preventDefault();
 
   const [email, setEmail] = useState("");

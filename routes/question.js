@@ -23,6 +23,10 @@ router.post("/", verifyToken, async (req, res) => {
   let user = await User.findById(req.user._id);
   if (!user) return res.status(404).send({ message: "Status Not Found" });
 
+  let topicBelongsToSubject = subject.topics.filter(singleTopic => singleTopic.toString() == topic._id);
+
+  if (topicBelongsToSubject.length == 0) return res.status(400).send("This topic does not belong to this subject")
+
   let question = new Question({
     title: req.body.title,
     text: req.body.text,
