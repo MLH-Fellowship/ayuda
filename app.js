@@ -3,7 +3,8 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require('dotenv');
 dotenv.config(); // reads the .env file
-var cors = require('cors')
+const cors = require('cors')
+
 
 // Connect to db
 mongoose.connect(
