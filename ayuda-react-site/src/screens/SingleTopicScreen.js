@@ -6,8 +6,11 @@ import axios from "axios";
 import { url } from "../constants";
 import Topic from "../components/Topic";
 import Question from "../components/Question";
+import { useHistory } from "react-router-dom";
 
 export default () => {
+  const history = useHistory();
+
   let { topicId } = useParams();
   const [topic, setTopic] = useState();
 
@@ -26,12 +29,20 @@ export default () => {
           <Typography variant="h5" gutterBottom>
             {topic.title}
           </Typography>
-          <Button variant="contained" color="secondary">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              history.push({
+                pathname: "/create-question",
+                search: `?subject=${topic.subject._id}&topic=${topic._id}`,
+              });
+            }}
+          >
             Create Question
           </Button>
         </div>
         <div class="d-flex flex-column align-items-start">
-
           <Typography variant="body" gutterBottom>
             {topic.questions.length == 1
               ? topic.questions.length + " question"
@@ -40,18 +51,18 @@ export default () => {
         </div>
         <hr />
         <Typography variant="h5" gutterBottom>
-            Questions
-          </Typography>
+          Questions
+        </Typography>
         <hr />
 
         {topic.questions.map((question) => {
-        return (
-          <div>
-            <Question id={question._id} />
-            <hr />
-          </div>
-        );
-      })}
+          return (
+            <div>
+              <Question id={question._id} />
+              <hr />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

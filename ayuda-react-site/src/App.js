@@ -14,6 +14,7 @@ import TopicScreen from "./screens/TopicsScreen";
 import CreateSubjectScreen from "./screens/CreateSubjectScreen";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateTopicScreen from "./screens/CreateTopicScreen";
+import CreateQuestionScreen from "./screens/CreateQuestionScreen";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
 
             <ProtectedRoute exact path="/create-subject" component={CreateSubjectScreen} />
             <ProtectedRoute exact path="/create-topic" component={CreateTopicScreen} />
+            <ProtectedRoute exact path="/create-question" component={CreateQuestionScreen} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </AppLayout>
