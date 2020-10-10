@@ -7,6 +7,9 @@ import axios from "axios";
 import auth from "../auth/Auth";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import {extendSession} from "../util/ExtendSession";
+
+
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -29,13 +32,16 @@ export default () => {
 
   if (!subject) return "Loading...";
 
-  const config = {
-    headers: { Authorization: `Bearer ${auth.getAccessToken()}` },
-  };
+
 
   const createTopic = () => {
-    axios.post(url + "api/topics", { title, subject: subjectId }, config).then((res) => {
+    axios.post(url + "api/topics", { title, subject: subjectId }, {headers: { Authorization: `Bearer ${auth.getAccessToken()}` }}).then((res) => {
       history.push("/topics/");
+    })
+    .catch(e =>{
+      if (e.response.data.message == "jwt expired") {
+        extendSession(createTopic)
+      }
     });
   };
 

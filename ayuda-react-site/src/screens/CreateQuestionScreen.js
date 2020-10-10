@@ -8,6 +8,8 @@ import auth from "../auth/Auth";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+import { extendSession } from "../util/ExtendSession";
+
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -36,19 +38,20 @@ export default () => {
 
   if (!subject || !topic) return "Loading...";
 
-  const config = {
-    headers: { Authorization: `Bearer ${auth.getAccessToken()}` },
-  };
-
   const createQuestion = () => {
     axios
       .post(
         url + "api/questions",
         { title, text, subject: subjectId, topic: topicId },
-        config
+        { headers: { Authorization: `Bearer ${auth.getAccessToken()}` } }
       )
       .then((res) => {
         history.push(`topics/${topic._id}`);
+      })
+      .catch((e) => {
+        if (e.response.data.message == "jwt expired") {
+          extendSession(createQuestion);
+        }
       });
   };
 
