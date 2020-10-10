@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import auth from "../auth/Auth";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -12,7 +12,8 @@ import Link from "@material-ui/core/Link";
 import CardMedia from "@material-ui/core/CardMedia";
 import backgroundImage from "../images/question.jpg";
 import { url } from "../constants";
-import axios from 'axios';
+import axios from "axios";
+import Snackbar from "../components/Snackbar";
 
 const useStyles = makeStyles({
   bullet: {
@@ -29,6 +30,10 @@ const useStyles = makeStyles({
 });
 
 export default function Login(props) {
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [authErrorMessage, setAuthErrorMessage] = useState("");
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const preventDefault = (event) => event.preventDefault();
@@ -36,22 +41,27 @@ export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
-
-
-
-
   const login = () => {
-    axios.post(url + "api/user/login", { email, password })
-      .then(res => {
+    setOpenAlert(false)
+    axios
+      .post(url + "api/user/login", { email, password })
+      .then((res) => {
         const accessToken = res.data.accessToken;
         const refreshToken = res.data.refreshToken;
-        auth.login(()=>{
-            props.history.push("/home")
-        }, accessToken, refreshToken)
+        auth.login(
+          () => {
+            props.history.push("/home");
+          },
+          accessToken,
+          refreshToken
+        );
         //this.setState({ persons });
       })
-  }
+      .catch((e) => {
+        setAuthErrorMessage(e.response.data.message ? e.response.data.message : (e.response.data.details[0].message ? e.response.data.details[0].message : "An error has occurred"))
+        setOpenAlert(true)
+      });
+  };
 
   return (
     <div className="container flex-column d-flex align-items-center justify-content-center">
@@ -59,7 +69,7 @@ export default function Login(props) {
         <div>
           <CardMedia
             className="p-0 m-0"
-            style={{ height:"180px" }}
+            style={{ height: "180px" }}
             image={backgroundImage}
             title="Contemplative Reptile"
           />
@@ -75,8 +85,8 @@ export default function Login(props) {
                     id="outlined-basic"
                     label="Email Address"
                     variant="outlined"
-                    onChange={(e)=>{
-                      setEmail(e.target.value)
+                    onChange={(e) => {
+                      setEmail(e.target.value);
                     }}
                   />
                   <TextField
@@ -85,8 +95,8 @@ export default function Login(props) {
                     type="password"
                     autoComplete="current-password"
                     variant="outlined"
-                    onChange={(e)=>{
-                      setPassword(e.target.value)
+                    onChange={(e) => {
+                      setPassword(e.target.value);
                     }}
                   />
                 </div>
@@ -94,7 +104,12 @@ export default function Login(props) {
             </CardContent>
 
             <CardActions className="d-flex justify-content-center">
-              <Button variant="contained" color="secondary" style={{ minWidth: "40%" }} onClick={login}>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ minWidth: "40%" }}
+                onClick={login}
+              >
                 <Typography>Login</Typography>
               </Button>
             </CardActions>
@@ -104,15 +119,18 @@ export default function Login(props) {
 
       <Card className="mb-4 mt-3 p-2" style={{ minWidth: "40%" }}>
         <Typography variant="overline">Don't Have An Account?</Typography>
-        <Link onClick={(e)=>{
-          props.history.push("/signup")
-          preventDefault(e);
-        }}>
+        <Link
+          onClick={(e) => {
+            props.history.push("/signup");
+            preventDefault(e);
+          }}
+        >
           <Typography className="pl-1 link" variant="overline">
             Sign up!
           </Typography>
         </Link>
       </Card>
+      {openAlert ? <Snackbar message={authErrorMessage} /> : null}
     </div>
   );
 }

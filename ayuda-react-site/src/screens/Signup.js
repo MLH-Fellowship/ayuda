@@ -13,6 +13,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import backgroundImage from "../images/question.jpg";
 import { url } from "../constants";
 import axios from "axios";
+import Snackbar from "../components/Snackbar";
 
 const useStyles = makeStyles({
   bullet: {
@@ -29,6 +30,11 @@ const useStyles = makeStyles({
 });
 
 export default function Login(props) {
+
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [authErrorMessage, setAuthErrorMessage] = useState("");
+
   const classes = useStyles();
   const preventDefault = (event) => event.preventDefault();
 
@@ -42,6 +48,8 @@ export default function Login(props) {
 
 
   const signup = () => {
+    setOpenAlert(false)
+
     axios.post(url + "api/user/register", { email, password, firstName, lastName, country, school, field }).then((res) => {
       const accessToken = res.data.accessToken;
       const refreshToken = res.data.refreshToken;
@@ -51,8 +59,12 @@ export default function Login(props) {
         },
         accessToken,
         refreshToken
-      );
+      )
       //this.setState({ persons });
+    }).catch((e) => {
+ 
+      setAuthErrorMessage(e.response.data.message ? e.response.data.message : (e.response.data.details[0].message ? e.response.data.details[0].message : "An error has occurred"))
+      setOpenAlert(true)
     });
   };
 
@@ -148,7 +160,7 @@ export default function Login(props) {
                 style={{ minWidth: "40%" }}
                 onClick={signup}
               >
-                <Typography>Login</Typography>
+                <Typography>Create Account</Typography>
               </Button>
             </CardActions>
           </div>
@@ -166,6 +178,8 @@ export default function Login(props) {
           </Typography>
         </Link>
       </Card>
+      {openAlert ? <Snackbar message={authErrorMessage} /> : null}
+
     </div>
   );
 }

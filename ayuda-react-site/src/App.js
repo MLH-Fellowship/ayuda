@@ -14,6 +14,8 @@ import TopicScreen from "./screens/TopicsScreen";
 import CreateSubjectScreen from "./screens/CreateSubjectScreen";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateTopicScreen from "./screens/CreateTopicScreen";
+import CreateQuestionScreen from "./screens/CreateQuestionScreen";
+import AuthProtectedRoute from "./components/AuthProtectedRoute";
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
         <AppLayout>
           <Switch>
             {/* <Route exact path="/" component={HomePage} /> */}
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/" component={Login} />
+            <AuthProtectedRoute exact path="/" component={Login} />
+            <AuthProtectedRoute exact path="/signup" component={Signup} />
+
+
             <Route exact path="/home" component={HomeScreen} />
             <Route exact path="/search" component={SearchScreen}  />
             <Route exact path="/subjects" component={SubjectScreen}  />
@@ -33,6 +37,8 @@ function App() {
 
             <ProtectedRoute exact path="/create-subject" component={CreateSubjectScreen} />
             <ProtectedRoute exact path="/create-topic" component={CreateTopicScreen} />
+            <ProtectedRoute exact path="/create-question" component={CreateQuestionScreen} />
+
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </AppLayout>

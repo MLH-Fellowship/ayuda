@@ -7,8 +7,15 @@ import ArrowDownwardOutlined from "@material-ui/icons/ArrowDownwardOutlined";
 import Link from "@material-ui/core/Link";
 import axios from "axios";
 import { url } from "../constants";
+import { useHistory } from "react-router-dom";
+
+
 
 const Question = ({ id }) => {
+
+  const history = useHistory();
+
+
   const [question, setQuestion] = useState();
   useEffect(() => {
     axios.get(`${url}api/questions/${id}`).then((res) => {
@@ -40,10 +47,18 @@ const Question = ({ id }) => {
           {question.text}
         </Typography>
         <div>
-          <Button variant="contained" size="small" className="mr-2">
+          <Button variant="contained" size="small" className="mr-2" onClick={
+            ()=>{
+              history.push(`subjects/${question.subject._id}`)
+            }
+          }>
             {question.subject.title}
           </Button>
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="small" onClick={
+            ()=>{
+              history.push(`topics/${question.topic._id}`)
+            }
+          }>
             {question.topic.title}
           </Button>
         </div>
