@@ -6,6 +6,7 @@ import { url } from "../constants";
 import axios from 'axios';
 import auth from "../auth/Auth";
 import { useHistory } from "react-router-dom";
+import {extendSession} from "../util/ExtendSession";
 
 
 export default () => {
@@ -14,14 +15,16 @@ export default () => {
 
     const [title, setTitle] = useState();
 
-    const config = {
-        headers: { Authorization: `Bearer ${auth.getAccessToken()}` }
-    };
 
     const createSubject = () => {
-        axios.post(url + "api/subjects", { title }, config)
+        axios.post(url + "api/subjects", { title }, {headers: { Authorization: `Bearer ${auth.getAccessToken()}` }})
         .then(res => {
             history.push("/subjects/")
+        })
+        .catch(e =>{
+          if (e.response.data.message == "jwt expired") {
+            extendSession(createSubject)
+          }
         })
     }
 
