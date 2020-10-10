@@ -90,6 +90,10 @@ const Navbar = () => {
   const searchQuestions = (e) => {
     if (e.keyCode == 13) {
       console.log("value", e.target.value);
+      history.push({
+        pathname:"/search",
+        search:`?text=${searchQuery}`
+      })
     }
   };
 
