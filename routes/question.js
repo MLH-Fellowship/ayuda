@@ -7,10 +7,10 @@ const User = require("../models/User");
 
 const { questionValidation } = require("../validation");
 const verifyToken = require("./verifyToken");
+const { find } = require("../models/Subject");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/", verifyToken, async (req, res) => {
-
   const { error, value } = questionValidation(req.body);
   if (error) return res.status(400).send(error);
 
@@ -85,9 +85,27 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  return res.send(
-    await Question.find().populate("subject").populate("topic").populate("answers")
-  );
+  let topic = req.query.topic;
+  let subject = req.query.subject;
+
+  let questions = await Question.find()
+    .populate("subject")
+    .populate("topic")
+    .populate("answers");
+  questions = questions.filter((question) => {
+    if ((topic != null) & (subject != null)) {
+      return question.topic.title == topic && question.subject.title == subject;
+    }
+    else if (topic != null) {
+      return question.topic.title == topic;
+    }
+    else if (subject != null) {
+      return question.subject.title == subject;
+    }
+    return true;
+  });
+
+  return res.send(questions);
 });
 
 router.get("/:questionId", async (req, res) => {
@@ -106,8 +124,8 @@ router.delete("/:questionId", verifyToken, async (req, res) => {
   if (!ObjectId.isValid(req.params.questionId))
     return res.status(400).send({ message: "Invalid Id" });
 
-  await Topic.findByIdAndDelete(req.params.questionId)
-  return res.status(204).end()
-})
+  await Topic.findByIdAndDelete(req.params.questionId);
+  return res.status(204).end();
+});
 
 module.exports = router;

@@ -28,7 +28,7 @@ const HomeScreen = () => {
       </div>
       <div class="d-flex justify-content-between mt-2">
         <Typography variant="overline" gutterBottom>
-          50 questions
+          {questions.length} questions
         </Typography>
         <div>
           <TextField
