@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
-import SettingsIcon from "@material-ui/icons/Settings";
 import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
 import ArrowDownwardOutlined from "@material-ui/icons/ArrowDownwardOutlined";
 import Link from "@material-ui/core/Link";
+import axios from "axios";
+import { url } from "../constants";
 
-const Question = ({topic, text, subject, title}) => {
+const Question = ({ id }) => {
+  const [question, setQuestion] = useState();
+  useEffect(() => {
+    axios.get(`${url}api/questions/${id}`).then((res) => {
+      setQuestion(res.data);
+    });
+  }, []);
+
+  if (!question) return "Loading...";
+
   return (
     <div className="d-flex">
       <div className="d-flex flex-column mr-3">
@@ -23,19 +32,19 @@ const Question = ({topic, text, subject, title}) => {
       <div className="d-flex flex-column align-items-start">
         <Link style={{ cursor: "pointer", textDecoration: "none" }}>
           <Typography variant="h5" gutterBottom>
-            {title}
+            {question.title}
           </Typography>
         </Link>
 
         <Typography variant="body" gutterBottom>
-          {text}
+          {question.text}
         </Typography>
         <div>
           <Button variant="contained" size="small" className="mr-2">
-            {subject}
+            {question.subject.title}
           </Button>
           <Button variant="contained" size="small">
-            {topic}
+            {question.topic.title}
           </Button>
         </div>
       </div>
