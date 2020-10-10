@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import auth from "../auth/Auth";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -15,9 +15,11 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import "../index.css";
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -83,8 +85,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = (props) => {
+
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+
+const Navbar = () => {
+
+  let query = useQuery();
+  let text = query.get("text");
+
+
+
+  const [searchQuery, setSearchQuery] = useState();
   const history = useHistory();
+
+  const searchQuestions = (e) => {
+    if (e.keyCode == 13) {
+      //console.log("value", e.target.value);
+      history.push({
+        pathname:"/search",
+        search:`?text=${searchQuery ? searchQuery : ""}`
+      })
+    }
+  };
+
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -127,10 +154,9 @@ const Navbar = (props) => {
           <MenuItem
             onClick={() => {
               handleMenuClose();
-              auth.logout(()=>{
+              auth.logout(() => {
                 history.push("/");
               });
-              
             }}
           >
             Logout
@@ -196,7 +222,9 @@ const Navbar = (props) => {
           >
             <MenuIcon />
           </IconButton> */}
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography onClick={()=>{
+            history.push("/home")
+          }} style={{ cursor:"pointer" }} className={classes.title} variant="h6" noWrap>
             Ayuda
           </Typography>
           <div className={classes.search}>
@@ -204,6 +232,11 @@ const Navbar = (props) => {
               <SearchIcon />
             </div>
             <InputBase
+              onKeyDown={searchQuestions}
+              onChange={(e)=>{
+                setSearchQuery(e.target.value)
+              }}
+              // value={text ? text : ""}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
