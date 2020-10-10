@@ -39,11 +39,6 @@ const HomeScreen = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => {
-            if (!auth.isAuthenticated()) {
-              history.push("/");
-            }
-          }}
         >
           Ask Question
         </Button>

@@ -27,7 +27,7 @@ export default () => {
             {topic.title}
           </Typography>
           <Button variant="contained" color="secondary">
-            Create Subject
+            Create Question
           </Button>
         </div>
         <div class="d-flex flex-column align-items-start">

@@ -22,9 +22,9 @@ export default () => {
         <Typography variant="h5" gutterBottom>
           All Topics
         </Typography>
-        <Button variant="contained" color="secondary">
+        {/* <Button variant="contained" color="secondary">
           Create Topic
-        </Button>
+        </Button> */}
       </div>
 
       <div class="d-flex justify-content-between mt-2">
