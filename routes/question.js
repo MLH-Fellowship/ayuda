@@ -87,22 +87,16 @@ router.post("/", verifyToken, async (req, res) => {
 router.get("/", async (req, res) => {
   let topic = req.query.topic;
   let subject = req.query.subject;
+  let text = req.query.text;
 
   let questions = await Question.find()
     .populate("subject")
     .populate("topic")
     .populate("answers");
   questions = questions.filter((question) => {
-    if ((topic != null) & (subject != null)) {
-      return question.topic.title == topic && question.subject.title == subject;
-    }
-    else if (topic != null) {
-      return question.topic.title == topic;
-    }
-    else if (subject != null) {
-      return question.subject.title == subject;
-    }
-    return true;
+
+    return ( text == null || question.title.toLowerCase().includes(text.toLowerCase()) ||  question.text.toLowerCase().includes(text.toLowerCase()) ) && ( subject == null || question.subject.title.toLowerCase().includes(subject.toLowerCase()) ) && ( topic == null || question.topic.title.toLowerCase().includes(topic.toLowerCase()) )
+
   });
 
   return res.send(questions);

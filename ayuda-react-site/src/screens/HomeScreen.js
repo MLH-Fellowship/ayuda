@@ -8,13 +8,37 @@ import axios from "axios";
 import { url } from "../constants";
 
 const HomeScreen = () => {
+  const [subject, setSubject] = useState();
+  const [topic, setTopic] = useState();
   const [questions, setQuestions] = useState([]);
+
+  const searchQuestions = () => {
+    if (subject && topic) {
+      axios
+        .get(`${url}api/questions?subject=${subject}&topic=${topic}`)
+        .then((res) => {
+          setQuestions(res.data);
+        });
+    } else if (topic) {
+      axios.get(`${url}api/questions?topic=${topic}`).then((res) => {
+        setQuestions(res.data);
+      });
+    } else if (subject) {
+      axios.get(`${url}api/questions?subject=${subject}`).then((res) => {
+        setQuestions(res.data);
+      });
+    } else {
+      axios.get(`${url}api/questions/`).then((res) => {
+        setQuestions(res.data);
+      });
+    }
+  };
 
   useEffect(() => {
     axios.get(`${url}api/questions/`).then((res) => {
       setQuestions(res.data);
     });
-  });
+  }, []);
 
   return (
     <div class="container">
@@ -38,6 +62,9 @@ const HomeScreen = () => {
             autoComplete="current-password"
             variant="outlined"
             className="mr-2"
+            onChange={(e)=>{
+              setSubject(e.target.value)
+            }}
           />
           <TextField
             size="small"
@@ -46,9 +73,16 @@ const HomeScreen = () => {
             autoComplete="current-password"
             variant="outlined"
             className="mr-2"
+            onChange={(e)=>{
+              setTopic(e.target.value)
+            }}
           />
 
-          <Button variant="contained" startIcon={<SettingsIcon />}>
+          <Button
+            onClick={searchQuestions}
+            variant="contained"
+            startIcon={<SettingsIcon />}
+          >
             Apply Filter
           </Button>
         </div>
