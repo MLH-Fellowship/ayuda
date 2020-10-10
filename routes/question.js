@@ -118,6 +118,30 @@ router.get("/:questionId", async (req, res) => {
   return res.send(question);
 });
 
+router.put("/:questionId", async (req, res) => {
+  if (!ObjectId.isValid(req.params.questionId))
+    return res.status(400).send({ message: "Invalid Id" });
+
+  const body = req.body
+
+  const question = await Question.findById(req.params.questionId)
+
+  if(!question) {
+    return res.status(400).send({ message: "No question found for given ID" })
+  }
+
+  question.title = body.title
+  question.text = body.text
+  question.tags = body.tags
+  //if you want to change the subject just delete it and make a new one
+  //created user can't be changed
+  question.answers = body.answers
+  //created date can't be changed
+
+  const savedQuestion = await question.save()
+  return res.send(savedQuestion)
+})
+
 router.delete("/:questionId", verifyToken, async (req, res) => {
   if (!ObjectId.isValid(req.params.questionId))
     return res.status(400).send({ message: "Invalid Id" });
