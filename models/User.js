@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
             ref:"Answer"
         },
     ],
+    points: {
+        type: mongoose.Schema.Types.Number,
+        default: 0,
+    },
     createdAt: {
         type: Date,
         default: Date.now

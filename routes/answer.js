@@ -127,10 +127,28 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
     const answer = await Answer.findById(req.params.answerId)
     const vote = answer.votes.find(vote => String(vote.user._id) === String(req.user._id))
 
+    //Obtain owner of answer to update their points
+    const answerOwner = await User.findById(answer.user) 
+    if(!answerOwner) {
+        console.log("Answer does not have a user. This is probably an issue")
+    }
+    
     //One vote per user
     //req.body.isUpvote represents whether it's an upvote or downvote
     if (vote) {
         console.log("Vote exists already for user " + req.user._id)
+
+        if(vote.isUpvote !== req.body.isUpvote) {
+            //If there's already a vote and we flip the vote value, have to actually change value by 2
+            //1 for removal of original vote, and 1 in the same direction for addition of new vote
+            if(vote.isUpvote && !req.body.isUpvote) {
+                answerOwner.points = answerOwner.points - 2
+            }
+            else {
+                answerOwner.points = answerOwner.points + 2
+            }
+        }
+
         vote.isUpvote = req.body.isUpvote
     }
     else {
@@ -138,10 +156,21 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
         const newVote = {
             user: req.user,
             isUpvote: req.body.isUpvote
-        }
+        }       
 
         answer.votes.push(newVote)
+
+        //If upvote, add 1 to user points
+        //Otherwise, subtract 1
+        if(req.body.isUpvote) {
+            answerOwner.points = answerOwner.points + 1
+        }
+        else {
+            answerOwner.points = answerOwner.points - 1
+        }
     }
+
+    const savedAnswerOwner = await answerOwner.save()
 
     const savedAnswer = await answer.save()
     res.status(200).json(savedAnswer)
@@ -165,7 +194,24 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
     //If the user has voted on the answer, remove the vote, otherwise don't do anything
     if (voteIndex >= 0) {
         console.log("Vote exists for user " + req.user._id)
+        const isUpvote = answer.votes[voteIndex].isUpvote
         answer.votes.splice(voteIndex, 1) //delete vote by index
+
+        const user = await User.findById(answer.user) 
+        if(!user) {
+            console.log("Answer does not have a user. This is probably an issue")
+        }
+        else {
+            //If the removed vote is an upvote, remove the point from user points
+            //Otherwise, add back the removed point
+            if(isUpvote) {
+                user.points = user.points - 1
+            }
+            else {
+                user.points = user.points + 1
+            }
+            const savedUser = await user.save()
+        }       
     }
     else {
         console.log("Vote does not exist for user " + req.user._id)
