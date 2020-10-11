@@ -49,14 +49,14 @@ const Question = ({ id }) => {
         <div>
           <Button variant="contained" size="small" className="mr-2" onClick={
             ()=>{
-              history.push(`subjects/${question.subject._id}`)
+              history.push(`../subjects/${question.subject._id}`)
             }
           }>
             {question.subject.title}
           </Button>
           <Button variant="contained" size="small" onClick={
             ()=>{
-              history.push(`topics/${question.topic._id}`)
+              history.push(`../topics/${question.topic._id}`)
             }
           }>
             {question.topic.title}
