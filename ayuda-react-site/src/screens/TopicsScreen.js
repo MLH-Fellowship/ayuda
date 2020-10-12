@@ -11,7 +11,7 @@ export default () => {
 
   useEffect(() => {
     axios.get(`${url}api/topics/`).then((res) => {
-      setTopics(res.data);
+      setTopics(res.data.reverse());
     });
   }, []);
   if(!topics) return "loading..."

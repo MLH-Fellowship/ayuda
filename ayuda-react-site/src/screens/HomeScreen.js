@@ -20,13 +20,13 @@ const HomeScreen = () => {
     axios
       .get(`${url}api/questions?subject=${subject}&topic=${topic}`)
       .then((res) => {
-        setQuestions(res.data);
+        setQuestions(res.data.reverse());
       });
   };
 
   useEffect(() => {
     axios.get(`${url}api/questions/`).then((res) => {
-      setQuestions(res.data);
+      setQuestions(res.data.reverse());
     });
   }, []);
 

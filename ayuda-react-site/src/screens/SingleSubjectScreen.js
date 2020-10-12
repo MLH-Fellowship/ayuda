@@ -15,6 +15,8 @@ export default () => {
 
   useEffect(() => {
     axios.get(`${url}api/subjects/${subjectId}`).then((res) => {
+      res.data.topics = res.data.topics.reverse();
+
       setSubject(res.data);
     });
   }, []);

@@ -34,7 +34,7 @@ const SearchScreen = (props) => {
 
   const searchQuestions = () => {
     axios
-      .get(`${url}api/questions?subject=${subject}&topic=${topic}&text=${textInState ? textInState : text}`)
+      .get(`${url}api/questions?subject=${subject}&topic=${topic}&text=${textInState != null || textInState != undefined  ? textInState : text}`)
       .then((res) => {
         setQuestions(res.data);
       });
