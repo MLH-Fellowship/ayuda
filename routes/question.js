@@ -112,6 +112,7 @@ router.get("/:questionId", async (req, res) => {
 
   const question = await Question.findById(req.params.questionId)
     .populate("subject")
+    .populate("user")
     .populate("topic")
     .populate("answers");
   if (!question) return res.status(404).send({ message: "Question Not Found" });
