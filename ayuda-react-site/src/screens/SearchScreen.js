@@ -113,6 +113,7 @@ const SearchScreen = (props) => {
         return (
           <div>
             <Question
+            id={question._id}
               title={question.title}
               text={question.text}
               topic={question.topic.title}
