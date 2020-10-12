@@ -14,7 +14,7 @@ export default () => {
 
   useEffect(() => {
     axios.get(`${url}api/subjects/`).then((res) => {
-      setSubjects(res.data);
+      setSubjects(res.data.reverse());
     });
   }, []);
 

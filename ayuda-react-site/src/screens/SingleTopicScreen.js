@@ -16,6 +16,7 @@ export default () => {
 
   useEffect(() => {
     axios.get(`${url}api/topics/${topicId}`).then((res) => {
+      res.data.questions = res.data.questions.reverse();
       setTopic(res.data);
     });
   }, []);
@@ -55,7 +56,7 @@ export default () => {
         </Typography>
         <hr />
 
-        {topic.questions.map((question) => {
+        {topic.questions.reverse().map((question) => {
           return (
             <div>
               <Question id={question._id} />

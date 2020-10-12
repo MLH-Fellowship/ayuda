@@ -46,7 +46,7 @@ export default () => {
         { headers: { Authorization: `Bearer ${auth.getAccessToken()}` } }
       )
       .then((res) => {
-        history.push(`topics/${topic._id}`);
+        history.goBack()
       })
       .catch((e) => {
         if (e.response.data.message == "jwt expired") {

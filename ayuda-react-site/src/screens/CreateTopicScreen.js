@@ -36,7 +36,7 @@ export default () => {
 
   const createTopic = () => {
     axios.post(url + "api/topics", { title, subject: subjectId }, {headers: { Authorization: `Bearer ${auth.getAccessToken()}` }}).then((res) => {
-      history.push("/topics/");
+      history.goBack();
     })
     .catch(e =>{
       if (e.response.data.message == "jwt expired") {
