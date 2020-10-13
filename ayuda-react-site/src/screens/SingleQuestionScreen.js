@@ -8,14 +8,10 @@ import axios from "axios";
 import { url } from "../constants";
 import { toTimestamp } from "../util/ToTimeStamp";
 
-import IconButton from "@material-ui/core/IconButton";
-import ArrowUpwardOutlined from "@material-ui/icons/ArrowUpwardOutlined";
-import ArrowDownwardOutlined from "@material-ui/icons/ArrowDownwardOutlined";
-
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import Link from "@material-ui/core/Link";
+import Answer from "../components/Answer";
+import InfoCard from "../components/InfoCard";
 
 const preventDefault = (event) => event.preventDefault();
 
@@ -62,7 +58,9 @@ export default (props) => {
         </div>
       </div>
       <hr />
-      <Typography align="left" className="d-flex justify-content-start">{question.text}</Typography>
+      <Typography align="left" className="d-flex justify-content-start">
+        {question.text}
+      </Typography>
 
       <div className="my-4">
         <Button
@@ -95,16 +93,12 @@ export default (props) => {
         >
           <Typography style={{ cursor: "pointer" }}>Add a comment</Typography>
         </Link>
-        <Card className="p-2">
-          <Typography>
-            Posted By {question.user.firstName} {question.user.lastName}
-          </Typography>
-          <Typography>
-            Asked {postedAt.getDate()}/{postedAt.getMonth()}/
-            {postedAt.getFullYear()} at {postedAt.getHours()}:
-            {postedAt.getMinutes()}
-          </Typography>
-        </Card>
+        <InfoCard
+          text1={`Posted By ${question.user.firstName} ${question.user.lastName}`}
+          text2={`            Asked ${postedAt.getDate()}/${postedAt.getMonth()}/
+            ${postedAt.getFullYear()} at ${postedAt.getHours()}:
+            ${postedAt.getMinutes()}`}
+        />
       </div>
       <hr />
       <div className="d-flex">
@@ -116,25 +110,9 @@ export default (props) => {
       </div>
       <hr />
 
-
-
-      {question.answers.map((answer) => {
-        return (
-          <div className="d-flex align-items-center">
-            <div className="d-flex flex-column mr-3">
-              <IconButton color="inherit">
-                <ArrowUpwardOutlined />
-              </IconButton>
-              24
-              <IconButton color="inherit">
-                <ArrowDownwardOutlined />
-              </IconButton>
-            </div>
-
-            <Typography align="left">{answer.text}</Typography>
-          </div>
-        );
-      })}
+      {question.answers.map((answer) => (
+        <Answer id={answer._id} />
+      ))}
     </div>
   );
 };
