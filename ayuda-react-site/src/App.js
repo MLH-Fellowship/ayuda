@@ -69,7 +69,7 @@ function App() {
             />
             <ProtectedRoute
               exact
-              path="/answer-question"
+              path="/answer-question/:questionId"
               component={CreateAnswerScreen}
             />
 

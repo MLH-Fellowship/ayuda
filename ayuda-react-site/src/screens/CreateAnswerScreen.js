@@ -7,6 +7,7 @@ import axios from 'axios';
 import auth from "../auth/Auth";
 import { useHistory } from "react-router-dom";
 import {extendSession} from "../util/ExtendSession";
+import { useParams } from "react-router-dom";
 
 
 export default () => {
