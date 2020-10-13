@@ -112,6 +112,19 @@ router.get("/:answerId", async (req, res) => {
     return res.send(answer);
 })
 
+router.get("/", async (req, res) => {
+
+    const answer = await Answer.find()
+        .populate("replies")
+        .populate("user")
+        .populate("question")
+        .populate("answerBeingRepliedTo");
+    if (!answer) return res.status(404).send({
+        message: "Answer Not Found"
+    });
+    return res.send(answer);
+})
+
 //Shared endpoint for upvoting/downvoting a single answer
 router.put("/vote/:answerId", verifyToken, async (req, res) => {
     if (!ObjectId.isValid(req.params.answerId))

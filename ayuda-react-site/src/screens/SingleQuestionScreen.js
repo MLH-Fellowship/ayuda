@@ -19,13 +19,11 @@ import Link from "@material-ui/core/Link";
 
 const preventDefault = (event) => event.preventDefault();
 
-
 export default (props) => {
   const history = useHistory();
   let { questionId } = useParams();
 
   const [question, setQuestion] = useState();
-  
 
   useEffect(() => {
     axios.get(`${url}api/questions/${questionId}`).then((res) => {
@@ -64,17 +62,7 @@ export default (props) => {
         </div>
       </div>
       <hr />
-      <div className="d-flex justify-content-start">
-        {/* <div className="d-flex flex-column mr-3">
-          <IconButton color="inherit">
-            <ArrowUpwardOutlined />
-          </IconButton>
-          <IconButton color="inherit">
-            <ArrowDownwardOutlined />
-          </IconButton>
-        </div> */}
-        {question.text}
-      </div>
+      <Typography align="left" className="d-flex justify-content-start">{question.text}</Typography>
 
       <div className="my-4">
         <Button
@@ -121,10 +109,32 @@ export default (props) => {
       <hr />
       <div className="d-flex">
         <Typography variant="h6" gutterBottom>
-          {question.answers.length} Answers
+          {question.answers.length == 1
+            ? question.answers.length + " Answer"
+            : question.answers.length + " Answers"}
         </Typography>
       </div>
       <hr />
+
+
+
+      {question.answers.map((answer) => {
+        return (
+          <div className="d-flex align-items-center">
+            <div className="d-flex flex-column mr-3">
+              <IconButton color="inherit">
+                <ArrowUpwardOutlined />
+              </IconButton>
+              24
+              <IconButton color="inherit">
+                <ArrowDownwardOutlined />
+              </IconButton>
+            </div>
+
+            <Typography align="left">{answer.text}</Typography>
+          </div>
+        );
+      })}
     </div>
   );
 };

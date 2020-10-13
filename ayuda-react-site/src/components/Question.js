@@ -36,7 +36,7 @@ const Question = ({ id }) => {
           </Typography>
         </Link>
 
-        <Typography variant="body" gutterBottom>
+        <Typography align="left" variant="body" gutterBottom>
           {question.text}
         </Typography>
         <div>
