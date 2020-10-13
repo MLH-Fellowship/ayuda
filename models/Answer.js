@@ -38,7 +38,11 @@ const answerSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.Boolean, //true for upvote, false for downvote
       required: true
     }
-  }]
+  }],
+  points: {
+    type: mongoose.Schema.Types.Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("Answer", answerSchema);

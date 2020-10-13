@@ -143,9 +143,11 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
             //1 for removal of original vote, and 1 in the same direction for addition of new vote
             if(vote.isUpvote && !req.body.isUpvote) {
                 answerOwner.points = answerOwner.points - 2
+                answer.points = answer.points - 2
             }
             else {
                 answerOwner.points = answerOwner.points + 2
+                answer.points = answer.points + 2
             }
         }
 
@@ -164,14 +166,15 @@ router.put("/vote/:answerId", verifyToken, async (req, res) => {
         //Otherwise, subtract 1
         if(req.body.isUpvote) {
             answerOwner.points = answerOwner.points + 1
+            answer.points = answer.points + 1
         }
         else {
             answerOwner.points = answerOwner.points - 1
+            answer.points = answer.points - 1
         }
     }
 
-    const savedAnswerOwner = await answerOwner.save()
-
+    await answerOwner.save()
     const savedAnswer = await answer.save()
     res.status(200).json(savedAnswer)
 })
@@ -206,11 +209,14 @@ router.put("/deletevote/:answerId", verifyToken, async (req, res) => {
             //Otherwise, add back the removed point
             if(isUpvote) {
                 user.points = user.points - 1
+                answer.points = answer.points - 1
             }
             else {
                 user.points = user.points + 1
+                answer.points = answer.points + 1
             }
-            const savedUser = await user.save()
+            
+            await user.save()
         }       
     }
     else {
