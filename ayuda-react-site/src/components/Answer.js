@@ -49,13 +49,13 @@ export default ({ id }) => {
 
           <div className="d-flex justify-content-between mt-2">
             <Link
-              style={{ cursor: "pointer", textDecoration: "none" }}
-            //   onClick={(e) => {
-            //     props.history.push(`/answer-question/${questionId}`);
-            //     preventDefault(e);
-            //   }}
+              style={{ cursor: "pointer" ,textDecoration: "none" }}
+              onClick={(e) => {
+                history.push(`/answer-question/${answer.question._id}/answers/${answer._id}`);
+                e.preventDefault();
+              }}
             >
-              <Typography style={{ cursor: "pointer" }}>
+              <Typography>
                 Reply to comment
               </Typography>
             </Link>

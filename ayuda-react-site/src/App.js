@@ -72,6 +72,11 @@ function App() {
               path="/answer-question/:questionId"
               component={CreateAnswerScreen}
             />
+            <ProtectedRoute
+              exact
+              path="/answer-question/:questionId/answers/:answerId"
+              component={CreateAnswerScreen}
+            />
 
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
