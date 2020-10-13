@@ -62,7 +62,7 @@ export default (props) => {
         </div>
       </div>
       <hr />
-      <div className="d-flex justify-content-start">{question.text}</div>
+      <Typography align="left" className="d-flex justify-content-start">{question.text}</Typography>
 
       <div className="my-4">
         <Button
@@ -125,13 +125,13 @@ export default (props) => {
               <IconButton color="inherit">
                 <ArrowUpwardOutlined />
               </IconButton>
-              
+              24
               <IconButton color="inherit">
                 <ArrowDownwardOutlined />
               </IconButton>
             </div>
 
-            <Typography>{answer.text}</Typography>
+            <Typography align="left">{answer.text}</Typography>
           </div>
         );
       })}
