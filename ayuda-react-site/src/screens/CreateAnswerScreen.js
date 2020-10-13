@@ -16,12 +16,12 @@ export default () => {
 
     const [text, setText] = useState();
 
-    let { questionId } = useParams();
+    let { questionId, answerId } = useParams();
 
 
 
     const answerQuestion = () => {
-        axios.post(url + "api/answers/", { text, question:questionId }, {headers: { Authorization: `Bearer ${auth.getAccessToken()}` }})
+        axios.post(url + "api/answers/", { text, question:questionId, answerBeingRepliedTo: answerId }, {headers: { Authorization: `Bearer ${auth.getAccessToken()}` }})
         .then(res => {
             history.goBack()
         })

@@ -20,11 +20,12 @@ export default (props) => {
   let { questionId } = useParams();
 
   const [question, setQuestion] = useState();
+  const [answersToTheQuestion, setAnswersToTheQuestion] = useState();
 
   useEffect(() => {
     axios.get(`${url}api/questions/${questionId}`).then((res) => {
       res.data.answers = res.data.answers.reverse();
-
+      setAnswersToTheQuestion(res.data.answers.filter(answer => !answer.answerBeingRepliedTo))
       setQuestion(res.data);
     });
   }, []);
@@ -51,7 +52,7 @@ export default (props) => {
             <Typography variant="overline">
               Answers{" "}
               <span className="font-weight-bold">
-                {question.answers.length}
+                {answersToTheQuestion.length}
               </span>
             </Typography>
           </div>
@@ -85,13 +86,13 @@ export default (props) => {
       </div>
       <div className="d-flex justify-content-between mt-4">
         <Link
-          style={{ cursor: "pointer", textDecoration: "none" }}
+          style={{ cursor: "pointer" ,textDecoration: "none" }}
           onClick={(e) => {
             props.history.push(`/answer-question/${questionId}`);
             preventDefault(e);
           }}
         >
-          <Typography style={{ cursor: "pointer" }}>Add a comment</Typography>
+          <Typography>Add a comment</Typography>
         </Link>
         <InfoCard
           text1={`Posted By ${question.user.firstName} ${question.user.lastName}`}
@@ -103,14 +104,14 @@ export default (props) => {
       <hr />
       <div className="d-flex">
         <Typography variant="h6" gutterBottom>
-          {question.answers.length == 1
-            ? question.answers.length + " Answer"
-            : question.answers.length + " Answers"}
+          {answersToTheQuestion.length == 1
+            ? answersToTheQuestion.length + " Answer"
+            : answersToTheQuestion.length + " Answers"}
         </Typography>
       </div>
       <hr />
 
-      {question.answers.map((answer) => (
+      {answersToTheQuestion.map((answer) => (
         <Answer id={answer._id} />
       ))}
     </div>
