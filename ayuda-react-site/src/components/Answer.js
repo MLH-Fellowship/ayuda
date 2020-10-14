@@ -11,33 +11,69 @@ import Card from "@material-ui/core/Card";
 import InfoCard from "../components/InfoCard";
 import { toTimestamp } from "../util/ToTimeStamp";
 import Link from "@material-ui/core/Link";
-import capitalize from "../util/Capitalize"
-
+import capitalize from "../util/Capitalize";
+import auth from "../auth/Auth";
+import { extendSession } from "../util/ExtendSession";
 
 const Answer = ({ id }) => {
   const history = useHistory();
 
   const [answer, setAnswer] = useState();
 
+  const [upvotes, setUpvotes] = useState();
+  const [alreadyUpvoted, setAlreadUpvoted] = useState(false);
+  const [alreadyDownvoted, setAlreadDownvoted] = useState(false);
+
+
   useEffect(() => {
     axios.get(`${url}api/answers/${id}`).then((res) => {
       setAnswer(res.data);
+      setUpvotes(res.data.votes.filter((vote) => vote.isUpvote == true).length);
     });
-  }, []);
+  },[]);
 
   if (!answer) return "loading..";
 
   let postedAt = new Date(toTimestamp(answer.createdAt));
 
+  const vote = (isUpvote) => {
+    axios
+      .put(
+        url + "api/answers/vote/" + answer._id,
+        { isUpvote },
+        { headers: { Authorization: `Bearer ${auth.getAccessToken()}` } }
+      )
+      .then((res) => {
+        setUpvotes(res.data.votes.filter((vote) => vote.isUpvote == true).length);
+      })
+      .catch((e) => {
+        if (e.response.data.message == "jwt expired") {
+          extendSession(() => {
+            vote(isUpvote);
+          });
+        }
+      });
+  };
+
   return (
     <div className="w-100">
       <div className="d-flex align-items-center">
         <div className="d-flex flex-column mr-3">
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              vote(true);
+            }}
+          >
             <ArrowUpwardOutlined />
           </IconButton>
-          24
-          <IconButton color="inherit">
+          {upvotes}
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              vote(false);
+            }}
+          >
             <ArrowDownwardOutlined />
           </IconButton>
         </div>
@@ -61,7 +97,9 @@ const Answer = ({ id }) => {
             </Link>
             <InfoCard
               userId={answer.user._id}
-              text1={`${capitalize(answer.user.firstName)} ${capitalize(answer.user.lastName)}`}
+              text1={`${capitalize(answer.user.firstName)} ${capitalize(
+                answer.user.lastName
+              )}`}
               text2={`            On ${postedAt.getDate()}/${postedAt.getMonth()}/
             ${postedAt.getFullYear()} at ${postedAt.getHours()}:${postedAt.getMinutes()}`}
             />
