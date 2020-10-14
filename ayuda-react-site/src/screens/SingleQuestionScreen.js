@@ -12,6 +12,9 @@ import Card from "@material-ui/core/Card";
 import Link from "@material-ui/core/Link";
 import Answer from "../components/Answer";
 import InfoCard from "../components/InfoCard";
+import capitalize from "../util/Capitalize"
+
+
 
 const preventDefault = (event) => event.preventDefault();
 
@@ -25,7 +28,9 @@ export default (props) => {
   useEffect(() => {
     axios.get(`${url}api/questions/${questionId}`).then((res) => {
       res.data.answers = res.data.answers.reverse();
-      setAnswersToTheQuestion(res.data.answers.filter(answer => !answer.answerBeingRepliedTo))
+      setAnswersToTheQuestion(
+        res.data.answers.filter((answer) => !answer.answerBeingRepliedTo)
+      );
       setQuestion(res.data);
     });
   }, []);
@@ -86,7 +91,7 @@ export default (props) => {
       </div>
       <div className="d-flex justify-content-between mt-4">
         <Link
-          style={{ cursor: "pointer" ,textDecoration: "none" }}
+          style={{ cursor: "pointer", textDecoration: "none" }}
           onClick={(e) => {
             props.history.push(`/answer-question/${questionId}`);
             preventDefault(e);
@@ -95,7 +100,8 @@ export default (props) => {
           <Typography>Add a comment</Typography>
         </Link>
         <InfoCard
-          text1={`Posted By ${question.user.firstName} ${question.user.lastName}`}
+          userId={question.user._id}
+          text1={`${capitalize(question.user.firstName)} ${capitalize(question.user.lastName)}`}
           text2={`            Asked ${postedAt.getDate()}/${postedAt.getMonth()}/
             ${postedAt.getFullYear()} at ${postedAt.getHours()}:${postedAt.getMinutes()}`}
         />
