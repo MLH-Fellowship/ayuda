@@ -11,7 +11,7 @@
 - run "npm start"
 
 
-# Running the react sire
+# Running the react site
 - cd into the ayuda-react-site directory
 - run "npm i"
 - run "npm start"
