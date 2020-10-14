@@ -18,6 +18,7 @@ import CreateQuestionScreen from "./screens/CreateQuestionScreen";
 import AuthProtectedRoute from "./components/AuthProtectedRoute";
 import SingleQuestionScreen from "./screens/SingleQuestionScreen";
 import CreateAnswerScreen from "./screens/CreateAnswerScreen";
+import ProfileScreen from "./screens/ProfileScreen"
 
 function App() {
   return (
@@ -50,7 +51,6 @@ function App() {
               path="/questions/:questionId"
               component={SingleQuestionScreen}
             />
-            
 
             <ProtectedRoute
               exact
@@ -76,6 +76,11 @@ function App() {
               exact
               path="/answer-question/:questionId/answers/:answerId"
               component={CreateAnswerScreen}
+            />
+            <ProtectedRoute
+              exact
+              path="/profile/:userId/"
+              component={ProfileScreen}
             />
 
             <Route path="*" component={() => "404 NOT FOUND"} />

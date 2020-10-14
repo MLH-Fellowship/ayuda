@@ -16,7 +16,6 @@ import { useLocation } from "react-router-dom";
 
 import "../index.css";
 
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
@@ -81,19 +80,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-
 const Navbar = () => {
-
   let query = useQuery();
   let text = query.get("text");
-
-
 
   const [searchQuery, setSearchQuery] = useState();
   const history = useHistory();
@@ -102,12 +95,11 @@ const Navbar = () => {
     if (e.keyCode == 13) {
       //console.log("value", e.target.value);
       history.push({
-        pathname:"/search",
-        search:`?text=${searchQuery ? searchQuery : ""}`
-      })
+        pathname: "/search",
+        search: `?text=${searchQuery ? searchQuery : ""}`,
+      });
     }
   };
-
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -146,7 +138,18 @@ const Navbar = () => {
     >
       {auth.isAuthenticated() ? (
         <div>
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem
+            onClick={async () => {
+              const currentUser = await auth.getCurrentUser()
+
+              history.push({
+                pathname: `/profile/${currentUser._id}`,
+              });
+              handleMenuClose();
+            }}
+          >
+            Profile
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleMenuClose();
@@ -218,9 +221,15 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton> */}
-          <Typography onClick={()=>{
-            history.push("/home")
-          }} style={{ cursor:"pointer" }} className={classes.title} variant="h6" noWrap>
+          <Typography
+            onClick={() => {
+              history.push("/home");
+            }}
+            style={{ cursor: "pointer" }}
+            className={classes.title}
+            variant="h6"
+            noWrap
+          >
             Ayuda
           </Typography>
           <div className={classes.search}>
@@ -229,8 +238,8 @@ const Navbar = () => {
             </div>
             <InputBase
               onKeyDown={searchQuestions}
-              onChange={(e)=>{
-                setSearchQuery(e.target.value)
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
               }}
               // value={text ? text : ""}
               placeholder="Search…"
