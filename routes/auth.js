@@ -12,14 +12,18 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 
 router.get("/me",verifyToken , async (req, res) => {
-    return res.send(await User.findById(req.user._id));
+    const user = await User.findById(req.user._id);
+    return res.send({
+        ...user._doc,
+        password: null
+    });
 })
 
-router.get("/",verifyToken , async (req, res) => {
-    return res.send(await User.find().populate("answers").populate("questions"));
-})
+// router.get("/",verifyToken , async (req, res) => {
+//     return res.send(await User.find().populate("answers").populate("questions"));
+// })
 
-router.get("/:userId",verifyToken, async (req, res) => {
+router.get("/:userId", async (req, res) => {
     if (!ObjectId.isValid(req.params.userId))
       return res.status(400).send({ message: "Invalid Id" });
   
@@ -27,7 +31,10 @@ router.get("/:userId",verifyToken, async (req, res) => {
       .populate("questions")
       .populate("answers");
     if (!user) return res.status(404).send({ message: "User Not Found" });
-    return res.send(user);
+    return res.send({
+        ...user._doc,
+        password: null
+    });
   });
 
 
