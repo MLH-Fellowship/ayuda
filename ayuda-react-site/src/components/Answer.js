@@ -11,6 +11,8 @@ import Card from "@material-ui/core/Card";
 import InfoCard from "../components/InfoCard";
 import { toTimestamp } from "../util/ToTimeStamp";
 import Link from "@material-ui/core/Link";
+import capitalize from "../util/Capitalize"
+
 
 const Answer = ({ id }) => {
   const history = useHistory();
@@ -58,7 +60,8 @@ const Answer = ({ id }) => {
               <Typography>Reply to comment</Typography>
             </Link>
             <InfoCard
-              text1={`Answered By ${answer.user.firstName} ${answer.user.lastName}`}
+              userId={answer.user._id}
+              text1={`${capitalize(answer.user.firstName)} ${capitalize(answer.user.lastName)}`}
               text2={`            On ${postedAt.getDate()}/${postedAt.getMonth()}/
             ${postedAt.getFullYear()} at ${postedAt.getHours()}:${postedAt.getMinutes()}`}
             />
@@ -70,11 +73,10 @@ const Answer = ({ id }) => {
       {/* Shows Responses to the answer */}
       {answer.replies.map((reply) => {
         return (
-
-            <div className="d-flex">
-              <div style={{ width: "10%" }} />
-              <Answer className="ml-2" id={reply._id} />
-            </div>
+          <div className="d-flex">
+            <div style={{ width: "10%" }} />
+            <Answer className="ml-2" id={reply._id} />
+          </div>
 
           //   <div>
           //     <div className="d-flex align-items-center">

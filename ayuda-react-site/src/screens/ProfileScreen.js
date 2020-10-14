@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Badge from "@material-ui/core/Badge";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import capitalize from "../util/Capitalize"
+
 
 export default () => {
   let { userId } = useParams();
@@ -19,10 +21,7 @@ export default () => {
     });
   }, []);
 
-  const capitalize = (s) => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
+
 
   const StyledBadge = withStyles((theme) => ({
     badge: {
