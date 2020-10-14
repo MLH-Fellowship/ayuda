@@ -8,6 +8,7 @@ const {
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("./verifyToken");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 
 router.get("/me",verifyToken , async (req, res) => {
@@ -17,6 +18,17 @@ router.get("/me",verifyToken , async (req, res) => {
 router.get("/",verifyToken , async (req, res) => {
     return res.send(await User.find().populate("answers").populate("questions"));
 })
+
+router.get("/:userId",verifyToken, async (req, res) => {
+    if (!ObjectId.isValid(req.params.userId))
+      return res.status(400).send({ message: "Invalid Id" });
+  
+    const user = await User.findById(req.params.userId)
+      .populate("questions")
+      .populate("answers");
+    if (!user) return res.status(404).send({ message: "User Not Found" });
+    return res.send(user);
+  });
 
 
 router.post("/extend-session", async (req, res) => {

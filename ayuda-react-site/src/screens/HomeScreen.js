@@ -36,12 +36,12 @@ const HomeScreen = () => {
         <Typography variant="h5" gutterBottom>
           All Questions
         </Typography>
-        <Button
+        {/* <Button
           variant="contained"
           color="secondary"
         >
           Ask Question
-        </Button>
+        </Button> */}
       </div>
       <div class="d-flex justify-content-between mt-2">
         <Typography variant="overline" gutterBottom>

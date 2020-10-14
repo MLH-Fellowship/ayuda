@@ -60,8 +60,7 @@ const Answer = ({ id }) => {
             <InfoCard
               text1={`Answered By ${answer.user.firstName} ${answer.user.lastName}`}
               text2={`            On ${postedAt.getDate()}/${postedAt.getMonth()}/
-            ${postedAt.getFullYear()} at ${postedAt.getHours()}:
-            ${postedAt.getMinutes()}`}
+            ${postedAt.getFullYear()} at ${postedAt.getHours()}:${postedAt.getMinutes()}`}
             />
           </div>
         </div>

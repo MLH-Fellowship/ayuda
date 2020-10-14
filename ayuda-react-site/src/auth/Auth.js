@@ -1,8 +1,23 @@
 // Irl this can be used to manage authenticated ie to load stuff from local storage
+import axios from "axios";
+import { url } from "../constants";
 
 class Auth {
   constructor() {
     this.authenticated = false;
+  }
+
+  getCurrentUser() {
+    const user = axios
+      .post(
+        url + "api/user/me",
+        {},
+        { headers: { Authorization: `Bearer ${this.getAccessToken()}` } }
+      )
+      .then((res) => {
+        return res.data
+      });
+      console.log(user);
   }
 
   login(cb, accessToken, refreshToken) {

@@ -97,8 +97,7 @@ export default (props) => {
         <InfoCard
           text1={`Posted By ${question.user.firstName} ${question.user.lastName}`}
           text2={`            Asked ${postedAt.getDate()}/${postedAt.getMonth()}/
-            ${postedAt.getFullYear()} at ${postedAt.getHours()}:
-            ${postedAt.getMinutes()}`}
+            ${postedAt.getFullYear()} at ${postedAt.getHours()}:${postedAt.getMinutes()}`}
         />
       </div>
       <hr />
